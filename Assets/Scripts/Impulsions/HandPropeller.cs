@@ -48,7 +48,7 @@ public class HandPropeller : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if(_propelling) {
             _handRigidBody.MovePosition(this.transform.position + this.transform.forward * Time.deltaTime * _propulsionSpeed);
@@ -61,10 +61,11 @@ public class HandPropeller : MonoBehaviour
             if(Vector3.Distance(this.transform.position, _owner.transform.position) < (0.2f + 0.005)) {
                 this.transform.localPosition = _initPos;
                 _retracting = false;
+                _ownerPM.endedHandRetraction((int) _anchorSide);
             }
         }
         if(_attached) {
-            this.transform.position = _collisionPosition;
+            this.transform.position = _collisionPosition - this.transform.forward*0.05f;
             this.transform.rotation = _collisionOrientation;
         }
     }
@@ -94,7 +95,7 @@ public class HandPropeller : MonoBehaviour
     }
 
     public void OnCollisionEnter(Collision other) {
-        if(other.gameObject.tag != "NotDragable") {
+        if(other.gameObject.tag != "NotDragable" && _propelling) {
             _propelling = false;
             _retracting = false;
             _attached = true;
@@ -124,6 +125,10 @@ public class HandPropeller : MonoBehaviour
     }
 
     public void FreezePositionOnDrag() {
-      this.transform.position = (_collisionPosition - this.transform.position*0.02f);
+      // Ensures the plier do not move the wall.
+      // Yet let the plier retract if player decided to cancel the drag.
+      if(!_retracting) {
+        this.transform.position = (_collisionPosition - this.transform.forward*0.05f);
+      }
     }
 }

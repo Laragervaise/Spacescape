@@ -551,6 +551,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &404865568 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8590085628554181399, guid: 126d619cf4daa52469682f85c1378b4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 223974226}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &404865569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404865568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db53e89e86310f446805bdcce07fc513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &589286935
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -558,6 +576,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 223974228}
     m_Modifications:
+    - target: {fileID: 4518665549472693895, guid: a698cffd515bed34bbe6c9630cd59ccb,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6582963589376950680, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -815,14 +838,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1308624276}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.026497575, y: 0.122951366, z: 0.0032840094, w: 0.99205345}
   m_LocalPosition: {x: 1.201, y: 4.4108806, z: 8.142411}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 223974227}
   m_Father: {fileID: 0}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -3.06, y: 14.13, z: 0}
 --- !u!114 &1308624278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -836,6 +859,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerMass: 20
+  _leftController: {fileID: 404865568}
+  _rightController: {fileID: 1736716859}
 --- !u!1 &1563365409
 GameObject:
   m_ObjectHideFlags: 0
@@ -946,6 +971,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &1736716859 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3763126481478056960, guid: 126d619cf4daa52469682f85c1378b4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 223974226}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1736716860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736716859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db53e89e86310f446805bdcce07fc513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6582963590087327596
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -953,6 +996,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 223974229}
     m_Modifications:
+    - target: {fileID: 4518665549472693895, guid: a698cffd515bed34bbe6c9630cd59ccb,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6582963589376950685, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
       propertyPath: m_Name
