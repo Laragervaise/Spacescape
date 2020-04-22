@@ -7,36 +7,36 @@ public class PropulsionManager : MonoBehaviour {
 
     //Public instances
     public float _playerMass=20.0f;
+    public float _bodySize = 1.0f;
     public GameObject _leftController;
     public GameObject _rightController;
 
     //Private instances
+    //Pliers
     private GameObject _leftHand;
     private GameObject _rightHand;
 
+    //Controllers
     private ControllerGetter _leftControllerGetter;
     private ControllerGetter _rightControllerGetter;
 
+    // Plier propellers
     private HandPropeller[] _handPropellers; //0: Left, 1: Right
 
-    private float _bodySize = 1.0f;
+    // State
     private bool _beingDragged = false;
     private int _draggingHand;
-    private bool[] _handAttachedHeavy;
-    //private bool _leftHandAttachedHeavy = false;
-    //private bool _rightHandAttachedHeavy= false;
+    private bool[] _handAttachedHeavy; // Hand attached to an object that can't be moved
     private bool _moving = false;
-    private bool[] _forceRetract;
-    //private Vector3 _leftHandAttachedHeavyDirection;
-    //private Vector3 _rightHandAttachedHeavyDirection;
-    private Vector3[] _handAttachedHeavyDirection;
-    private Vector3 _goalDirection;
-    private Vector3 _lastPos;
+    private bool[] _forceRetract;      // Force retract the pliers
+    private Vector3[] _handAttachedHeavyDirection;  //Direction of plier attachement point
+    private Vector3 _goalDirection;                 //Camera Goal direction
+    private Vector3 _lastPos;                       //Last position of the camera: used to compute _moving
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.LogWarning("Entering Start PropulsionManager");
+        //Initialize variables
         _handAttachedHeavy = new bool[2]{false, false};
         _handAttachedHeavyDirection = new Vector3[2];
         _forceRetract = new bool[2]{false, false};
@@ -47,136 +47,45 @@ public class PropulsionManager : MonoBehaviour {
         _leftControllerGetter = _leftController.GetComponent<ControllerGetter>();
         _rightControllerGetter = _rightController.GetComponent<ControllerGetter>();
 
-        Debug.LogWarning("Found hands PropulsionManager");
         _handPropellers = new HandPropeller[2]{_leftHand.GetComponent<HandPropeller>(),
                                                _rightHand.GetComponent<HandPropeller>()};
-        Debug.LogWarning("Exit Start PropulsionManager");
-        //StartCoroutine("BeginPropelHand");
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        /*
-        // LeftHand
-        if(Input.GetKeyDown("e")) {
-          _handPropellers[0].RetractHand();
-          _handAttachedHeavy[0] = false;
-          _forceRetract[0] = true;
-        } else {
-          // TODO : Allow other hand to extend
-          if(Input.GetKeyDown("a") && !_beingDragged && !_handAttachedHeavy[0]) {
-            _handPropellers[0].PropulseHand();
-          }
-          if(Input.GetKeyUp("a") && !_beingDragged && !_handAttachedHeavy[0]) {
-            _handPropellers[0].StopPropulseHand();
-          }
-          if(Input.GetKeyDown("z") && !_beingDragged) {
-            if(_handAttachedHeavy[0]) {
-                OnDragOwner(_handAttachedHeavyDirection[0],0);
-            } else {
-                _handPropellers[0].RetractHand();
-            }
-          }
-          if(Input.GetKeyUp("z")) {
-            if(!_handAttachedHeavy[0] && !_forceRetract[0]) {
-                _handPropellers[0].StopRetractHand();
-            } else {
-                _beingDragged = false;
-            }
-          }
-        }
-        //RightHand
-        if(Input.GetKeyDown("i")) {
-          _handPropellers[1].RetractHand();
-          _handAttachedHeavy[1] = false;
-          _forceRetract[1] = true;
-        } else {
-          if(Input.GetKeyDown("p") && !_beingDragged && !_handAttachedHeavy[1]) {
-            _handPropellers[1].PropulseHand();
-          }
-          if(Input.GetKeyUp("p") && !_beingDragged && !_handAttachedHeavy[1]) {
-            _handPropellers[1].StopPropulseHand();
-          }
-          if(Input.GetKeyDown("o") && !_beingDragged) {
-            if(_handAttachedHeavy[1]) {
-                OnDragOwner(_handAttachedHeavyDirection[1],1);
-            } else {
-                _handPropellers[1].RetractHand();
-            }
-          }
-          if(Input.GetKeyUp("o")) {
-            if(!_handAttachedHeavy[1] && !_forceRetract[1]) {
-                _handPropellers[1].StopRetractHand();
-            } else {
-              _beingDragged = false;
-            }
-          }
-        }
+        /* For each plier, we have the following Behaviour:
+            - If the player presses Extention input:
+                If the player is not already being dragged on any other hand (potentially remove this) and this hand is not already attached:
+                  Start Propelling the plier
+            - If the player stops pressing Extention input:
+                If the player is not already being dragged on any other hand and this hand not already attached (to be consistent with above):
+                  Stop propelling the plier
+            - If the player starts pressing retraction input:
+                If the player is not already being dragged by any other hand (potentially remove this and apply to dragginghand only):
+                  * If the hand is attached to an heavy object:
+                      Attract the player to the heavy Object: retract toward the object
+                  * If the hand is not attached to anything:
+                      Retract the plier: retract toward the player
+                  * TODO: If the hand is attach to a light Object:
+                      Retract both the player and the object toward the center of mass of both objects. TODO: Do we freeze the plier during this action ?
+            - If the player stops pressing retraction input:
+                  * If it is attached to any object:
+                      Stops dragging
+                  * If the hand is not attached:
+                      We only stop the retraction toward the object if there is no "force retract" of the plier toward the player (cancel operation)
+            - If player hits the cancel Button:
+                Force retract the plier and overwrites any other action
+
+            - TODO: If the player presses the grab button :
+                If the hand is colliding with an object
+                    Attach the plier to the object and get the mass of this object
         */
-
-        /*
-        // LeftHand
-
-        // If the player wants to propulse left plier, that the player is not being dragged and the plier is not already attached
-        if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) && !_beingDragged && !_leftHandAttachedHeavy) {
-          _handPropellers[0].PropulseHand();
-        }
-        // If the player stops propulsing left plier, stop its movement.
-        if(OVRInput.GetUp(OVRInput.Button.PrimaryIndexTrigger) && !_beingDragged && !_leftHandAttachedHeavy) {
-          _handPropellers[0].StopPropulseHand();
-        }
-        // If the player decides the retract the plier: Drags the player if hand is attached, retract the plier otherwise
-        if(OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger) && !_beingDragged) {
-          if(_leftHandAttachedHeavy) {
-              OnDragOwner(_leftHandAttachedHeavyDirection,0);
-          } else {
-              _handPropellers[0].RetractHand();
-          }
-        }
-        // If the player stops retracting the plier, it is not being dragged anymore if he was being dragged, stop retracting otherwise.
-        if(OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger)) {
-          if(!_leftHandAttachedHeavy) {
-              _handPropellers[0].StopRetractHand();
-          } else {
-              _beingDragged = false;
-          }
-
-        }
-
-        //RightHand
-        // If the player wants to propulse right plier, that the player is not being dragged and the plier is not already attached
-        if(OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) && !_beingDragged && !_rightHandAttachedHeavy) {
-          _handPropellers[1].PropulseHand();
-        }
-        // If the player stops propulsing left plier, stop its movement.
-        if(OVRInput.GetUp(OVRInput.Button.SecondaryIndexTrigger) && !_beingDragged && !_rightHandAttachedHeavy) {
-          _handPropellers[1].StopPropulseHand();
-        }
-        // If the player decides the retract the plier: Drags the player if hand is attached, retract the plier otherwise
-        if(OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger) && !_beingDragged) {
-          if(_rightHandAttachedHeavy) {
-              OnDragOwner(_rightHandAttachedHeavyDirection,1);
-          } else {
-              _handPropellers[1].RetractHand();
-          }
-        }
-        // If the player stops retracting the plier, it is not being dragged anymore if he was being dragged, stop retracting otherwise.
-        if(OVRInput.GetUp(OVRInput.Button.SecondaryHandTrigger)) {
-          if(!_rightHandAttachedHeavy) {
-              _handPropellers[1].StopRetractHand();
-          } else {
-              _beingDragged = false;
-          }
-        }*/
-
         // LeftHand
         if(_leftControllerGetter.getCancel()) {
           _handPropellers[0].RetractHand();
           _handAttachedHeavy[0] = false;
           _forceRetract[0] = true;
         } else {
-          // TODO : Allow other hand to extend
           if(_leftControllerGetter.getExtensionStart() && !_beingDragged && !_handAttachedHeavy[0]) {
             _handPropellers[0].PropulseHand();
           }
@@ -226,19 +135,27 @@ public class PropulsionManager : MonoBehaviour {
           }
         }
 
-
         _moving = isPlayerMoving();
 
         //Movement if player is being dragged
+        /* We drag the player if there is a non-null goal direction and :
+              - it is being dragged
+            OR
+              - it is not being dragged, no plier is attached and the player is moving
+                  => Basically conserves the speed of the player when it as detached his plier while retracting
+        */
         if((_goalDirection != Vector3.zero) &&
                 (_beingDragged ||
                     (!_beingDragged && !_handAttachedHeavy[0] && !_handAttachedHeavy[1] && _moving)
                 )
-           ) {
+           )
+        {
+            // If the distance between the goal diraction and the player is big enough: move the player toward the position
             if(Vector3.Distance(this.transform.position, _goalDirection) > _bodySize) {
                 this.transform.position = Vector3.MoveTowards(transform.position, _goalDirection, Time.deltaTime);
-                if(_beingDragged) _handPropellers[_draggingHand].FreezePositionOnDrag();
-            } else {
+            }
+              // Else : if it was being dragged: finish the dragging operation, and in both cases (was moving), remove goal diraction: stops motion
+              else {
                 if(_beingDragged) {
                     _handPropellers[_draggingHand].OnDragFinished();
                     _beingDragged = false;
@@ -247,13 +164,13 @@ public class PropulsionManager : MonoBehaviour {
                     } else {
                         _handAttachedHeavy[1] = false;
                     }
-                    print("PLIER DETACHED " + _draggingHand);
                 }
                 _goalDirection = Vector3.zero;
             }
         }
     }
 
+    // See if player moved the last frame
     private bool isPlayerMoving() {
       float displacement = Vector3.Distance(this.transform.position, _lastPos);
       _lastPos = this.transform.position;
@@ -261,11 +178,12 @@ public class PropulsionManager : MonoBehaviour {
       return displacement>0.001f;
     }
 
+    // If a plier has attached a too heavy object to move
     public void OnAttachedPlierHeavier(Vector3 goalDirection,int handType) {
-        print("PLIER ATTACHED: "+handType);
         if(handType == 0) {
             _handAttachedHeavy[0] = true;
             _handAttachedHeavyDirection[0] = goalDirection;
+            _leftControllerGetter.SetControllerVibrationOn(0.2f);
         }
         else {
             _handAttachedHeavy[1] = true;
@@ -273,6 +191,7 @@ public class PropulsionManager : MonoBehaviour {
         }
     }
 
+    // If the player decided to drag toward an object
     public void OnDragOwner(Vector3 goalDirection,int handType) {
         _beingDragged = true;
         _goalDirection = goalDirection;
@@ -286,6 +205,7 @@ public class PropulsionManager : MonoBehaviour {
 
     }
 
+    // This is being called when the propeller has reached its initial position.
     public void endedHandRetraction(int handType) {
         _forceRetract[handType] = false;
     }
