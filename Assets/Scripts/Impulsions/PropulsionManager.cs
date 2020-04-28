@@ -32,6 +32,8 @@ public class PropulsionManager : MonoBehaviour {
     private Vector3[] _handAttachedHeavyDirection;  //Direction of plier attachement point
     private Vector3 _goalDirection;                 //Camera Goal direction
     private Vector3 _lastPos;                       //Last position of the camera: used to compute _moving
+    private Rigidbody _playerRigidBody;
+
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +45,7 @@ public class PropulsionManager : MonoBehaviour {
         _lastPos = this.transform.position;
         _leftHand = GameObject.Find("LeftPlier");
         _rightHand = GameObject.Find("RightPlier");
+        _playerRigidBody = this.GetComponent<Rigidbody>();
 
         _leftControllerGetter = _leftController.GetComponent<ControllerGetter>();
         _rightControllerGetter = _rightController.GetComponent<ControllerGetter>();
@@ -55,11 +58,12 @@ public class PropulsionManager : MonoBehaviour {
     {
         /* For each plier, we have the following Behaviour:
             - If the player presses Extention input:
-                If the player is not already being dragged on any other hand (potentially remove this) and this hand is not already attached:
-                  Start Propelling the plier
+                If this hand is not already attached:
+                  Start Propelling the plier.
             - If the player stops pressing Extention input:
-                If the player is not already being dragged on any other hand and this hand not already attached (to be consistent with above):
+                If this hand is not already attached:
                   Stop propelling the plier
+
             - If the player starts pressing retraction input:
                 If the player is not already being dragged by any other hand (potentially remove this and apply to dragginghand only):
                   * If the hand is attached to an heavy object:
@@ -73,16 +77,17 @@ public class PropulsionManager : MonoBehaviour {
                       Stops dragging
                   * If the hand is not attached:
                       We only stop the retraction toward the object if there is no "force retract" of the plier toward the player (cancel operation)
+
             - If player hits the cancel Button:
                 Force retract the plier and overwrites any other action
 
-            - TODO: If the player presses the grab button :
+            - TODO: If the player presses the grab button:
                 If the hand is colliding with an object
                     Attach the plier to the object and get the mass of this object
         */
         // LeftHand
         if(_leftControllerGetter.getCancel()) {
-          _handPropellers[0].RetractHand();
+          _handPropellers[0].ForceRetractHand();
           _handAttachedHeavy[0] = false;
           _forceRetract[0] = true;
         } else {
@@ -109,7 +114,7 @@ public class PropulsionManager : MonoBehaviour {
         }
         //RightHand
         if(_rightControllerGetter.getCancel()) {
-          _handPropellers[1].RetractHand();
+          _handPropellers[1].ForceRetractHand();
           _handAttachedHeavy[1] = false;
           _forceRetract[1] = true;
         } else {
@@ -136,7 +141,6 @@ public class PropulsionManager : MonoBehaviour {
         }
 
         _moving = isPlayerMoving();
-
         //Movement if player is being dragged
         /* We drag the player if there is a non-null goal direction and :
               - it is being dragged
@@ -148,8 +152,7 @@ public class PropulsionManager : MonoBehaviour {
                 (_beingDragged ||
                     (!_beingDragged && !_handAttachedHeavy[0] && !_handAttachedHeavy[1] && _moving)
                 )
-           )
-        {
+           ) {
             // If the distance between the goal diraction and the player is big enough: move the player toward the position
             if(Vector3.Distance(this.transform.position, _goalDirection) > _bodySize) {
                 this.transform.position = Vector3.MoveTowards(transform.position, _goalDirection, Time.deltaTime);
@@ -161,8 +164,10 @@ public class PropulsionManager : MonoBehaviour {
                     _beingDragged = false;
                     if(_draggingHand == 0){
                         _handAttachedHeavy[0] = false;
+                        endedForceRetraction(0);
                     } else {
                         _handAttachedHeavy[1] = false;
+                        endedForceRetraction(1);
                     }
                 }
                 _goalDirection = Vector3.zero;
@@ -188,6 +193,20 @@ public class PropulsionManager : MonoBehaviour {
         else {
             _handAttachedHeavy[1] = true;
             _handAttachedHeavyDirection[1] = goalDirection;
+            _rightControllerGetter.SetControllerVibrationOn(0.2f);
+        }
+    }
+
+    public void OnAttachedPlierObject(Vector3 goalDirection, int handType) {
+        if(handType == 0) {
+            _handAttachedHeavy[0] = true;
+            _handAttachedHeavyDirection[0] = goalDirection;
+            _leftControllerGetter.SetControllerVibrationOn(0.2f);
+        }
+        else {
+            _handAttachedHeavy[1] = true;
+            _handAttachedHeavyDirection[1] = goalDirection;
+            _rightControllerGetter.SetControllerVibrationOn(0.2f);
         }
     }
 
@@ -202,11 +221,10 @@ public class PropulsionManager : MonoBehaviour {
         } else {
             _handAttachedHeavy[0] = false;
         }
-
     }
 
     // This is being called when the propeller has reached its initial position.
-    public void endedHandRetraction(int handType) {
+    public void endedForceRetraction(int handType) {
         _forceRetract[handType] = false;
     }
 }

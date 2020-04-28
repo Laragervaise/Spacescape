@@ -27,7 +27,8 @@ public class ControllerGetter : MonoBehaviour
     void Start() {
         _plierPropeller = _plier.GetComponent<HandPropeller>();
     }
-    void Update()
+
+    void FixedUpdate()
     {
         // Update Inputs
         OVRInput.Update();
@@ -42,22 +43,14 @@ public class ControllerGetter : MonoBehaviour
             }
             this._plierPropeller.UpdatePropulsionSpeed(factor);
         }
-
-        //Reset cancel call when button is up for the first time. This is the only input that we don't handle the release in the
-        // PropulsionManager. All other interactions are being called during the update of PropulsionManager.
-        bool cancel_input;
-        if(controllers) {
-            if(_anchorSide == AnchorSideType.LeftHand) cancel_input = OVRInput.Get(OVRInput.Button.Three);
-            else                                       cancel_input = OVRInput.Get(OVRInput.Button.One);
-        } else {
-            if(_anchorSide == AnchorSideType.LeftHand) cancel_input = Input.GetKey("e");
-            else                                       cancel_input = Input.GetKey("i");
-        }
-        if((_wasCancelling) & (!cancel_input)) {
-            _wasCancelling = false;
-        }
     }
 
+
+    ///////////////////////
+    //
+    //    Retrieving Controls
+    //
+    //////////////////////
     public bool getExtensionStart() {
       bool extention_input;
       float factor = 1.0f;
@@ -150,13 +143,15 @@ public class ControllerGetter : MonoBehaviour
       }
 
       //Returns true the first frame it is being pressed
-      if((!_wasCancelling) & (cancel_input)) {
-          _wasCancelling = true;
-          return true;
-      }
-      return false;
+      return cancel_input;
     }
 
+
+    ///////////////////////
+    //
+    //    Vibration
+    //
+    //////////////////////
     public void SetControllerVibrationOn(float duration) {
         if(controllers) StartCoroutine("Vibrate", duration);
     }

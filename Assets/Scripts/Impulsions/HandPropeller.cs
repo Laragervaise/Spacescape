@@ -22,7 +22,7 @@ public class HandPropeller : MonoBehaviour
     private static float _initPropulsionSpeed;
 
     private PropulsionManager _ownerPM;
-    private Rigidbody _handRigidBody;
+    //private Rigidbody _handRigidBody;
     private Transform _anchorHandTransform;
 
     private Vector3 _initPos;
@@ -41,24 +41,24 @@ public class HandPropeller : MonoBehaviour
     void Start()
     {
         // Initialize instances
-        _handRigidBody = this.GetComponent<Rigidbody>();
-        _handRigidBody.interpolation = RigidbodyInterpolation.Interpolate;
+        //_handRigidBody = this.GetComponent<Rigidbody>();
+        //_handRigidBody.interpolation = RigidbodyInterpolation.Interpolate;
         _initPropulsionSpeed = _propulsionSpeed;
         _ownerPM = _owner.GetComponent<PropulsionManager>();
-        _handRigidBody.constraints = RigidbodyConstraints.FreezeRotation;// | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
+        //_handRigidBody.constraints = RigidbodyConstraints.FreezeRotation;// | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
         _anchorHandTransform = this.transform.parent;
         _plierRenderer = this.GetComponent<Renderer>();
         _initColor = _plierRenderer.material.color;
 
         //Initialize position
         //TODO : Adjust this
-        /*
+/*
         if((int)_anchorSide == 0) {
             this.transform.localRotation = Quaternion.Euler(0, -90, 0);
         } else {
             this.transform.localRotation = Quaternion.Euler(0, 90, 0);
         }
-        */
+*/
         this.transform.position += this.transform.forward * _initialOffset;
         _initPos = this.transform.localPosition;
         _initOrient = this.transform.localRotation;
@@ -82,10 +82,11 @@ public class HandPropeller : MonoBehaviour
                                                           this.transform.parent.transform.position,
                                                           Time.deltaTime * _initPropulsionSpeed);
 
-            if(Vector3.Distance(this.transform.position, _owner.transform.position) < (0.2f + 0.005)) {
+            if(Vector3.Distance(this.transform.position, _anchorHandTransform.transform.position) < (0.2f)) {
                 this.transform.localPosition = _initPos;
-                _retracting = false;
-                _ownerPM.endedHandRetraction((int) _anchorSide);
+                this.transform.localRotation = _initOrient;
+                StopRetractHand();
+                _ownerPM.endedForceRetraction((int) _anchorSide);
             }
         }
 
@@ -96,7 +97,7 @@ public class HandPropeller : MonoBehaviour
             this.transform.rotation = _collisionOrientation;
         }
 
-        //Update cylinder position
+        //Update cylinder position if not attached
         UpdateCylinderPosition();
     }
 
@@ -115,45 +116,53 @@ public class HandPropeller : MonoBehaviour
     public void RetractHand() {
         _propelling = false;
         _retracting = true;
+    }
+
+    public void ForceRetractHand() {
+        _propelling = false;
+        _retracting = true;
         _attached = false;
+        //if(this.transform.parent == null) ResetParent();
     }
 
     public void StopRetractHand() {
         _propelling = false;
         _retracting = false;
-        _attached = false;
-
-        //this.transform.parent = _anchorHandTransform;
     }
 
     //TODO : distach from handAnchor if needed
     public void OnTriggerEnter(Collider other) {
-
+        print("ENTERING");
         // If the collision is with an anchor object AND the player was propelling the hand (TODO: Change this to player decided to grab)
         // => Attach the plier to the object
-        if( (other.gameObject.tag != "NotDragable") & (other.gameObject.tag != "Plier") & _propelling) {
+        if((other.gameObject.tag != "NotDragable") & (other.gameObject.tag != "Plier") & _propelling) {
             _propelling = false;
             _retracting = false;
             _attached = true;
 
-            if(other.attachedRigidbody.mass>100.0f) {
+            if(other.gameObject.tag == "Heavy") {
               _ownerPM.OnAttachedPlierHeavier(this.transform.position, (int)_anchorSide);
-              //  this.transform.parent = null;
+              //CancelParent();
             } else {
+
               // Compute center of mass between plier(with object mass) and player with body mass
+              //float total_mass = _ownerPM._playerMass + other.attachedRigidbody.mass;
+              //Vector3 center_of_mass = _owner.transform.position*_ownerPM._playerMass/total_mass
+              //                       + this.transform.position*other.attachedRigidbody.mass/total_mass;
+
               //_ownerPM.OnAttachedPlierObject(center_of_mass, (int)_anchorSide);
+
             }
 
             // Save collision properties
-            _collisionPosition = this.transform.position + Vector3.back*0.05f;
+            _collisionPosition = this.transform.position;
             _collisionOrientation = this.transform.rotation;
 
             //Change Material
-            _plierRenderer.material.SetColor("_Color", Color.red);
+            _plierRenderer.material.SetColor("_Color", Color.white);
         }
         // If the colliding object is another plier: Then ?
         if(other.gameObject.tag == "Plier") {
-
         }
     }
 
@@ -164,20 +173,12 @@ public class HandPropeller : MonoBehaviour
     // Reset values after finishing dragging player
     //TODO : Reattach to hand anchor if detached
     public void OnDragFinished() {
+        //ResetParent();
         StopRetractHand();
+        _attached = false;
         this.transform.localPosition = _initPos;
         this.transform.localRotation = _initOrient;
     }
-    /*
-    // Ensures the plier do not move the wall.
-    // Yet let the plier retract if player decided to cancel the drag.
-    //TODO: Should not be needed
-    public void FreezePositionOnDrag() {
-      if(!_retracting) {
-        this.transform.position = (_collisionPosition - this.transform.forward*0.05f);
-      }
-    }
-    */
 
     public void UpdatePropulsionSpeed(float factor) {
         if(_propelling) this._propulsionSpeed = _initPropulsionSpeed * factor;
@@ -188,10 +189,18 @@ public class HandPropeller : MonoBehaviour
     }
 
     private void UpdateCylinderPosition() {
-        _tubeCylinder.transform.position = (this.transform.parent.transform.position+this.transform.position)/2;
+        _tubeCylinder.transform.position = (_anchorHandTransform.transform.position+this.transform.position)/2;
         _tubeCylinder.transform.LookAt(this.transform.position);
         _tubeCylinder.transform.rotation *= Quaternion.Euler(90.0f, 0.0f, 0.0f);
         _tubeCylinder.transform.localScale = new Vector3(0.1f,0.0f,0.1f)
-                                           + Vector3.up * Vector3.Distance(this.transform.parent.transform.position,this.transform.position) / 2;
+                                           + Vector3.up * Vector3.Distance(_anchorHandTransform.transform.position,this.transform.position) / 2;
+    }
+
+    public void CancelParent() {
+        this.transform.parent = null;
+    }
+
+    public void ResetParent() {
+        this.transform.parent = _anchorHandTransform;
     }
 }
