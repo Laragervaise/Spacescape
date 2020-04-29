@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ActionOnCollision : MonoBehaviour {
 
-    private float threshold = 8;
+    [Range(1, 10)]
+    public int threshold = 8;
 
     void OnCollisionEnter(Collision collision) {
         // if object thrown hard enough on a tagged object, this tagged object disappears

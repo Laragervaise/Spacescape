@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class OpenDoor : MonoBehaviour {
 
-    private float threshold = 8;
+    [Range(1, 10)]
+    public int threshold = 8;
 
     void OnCollisionEnter(Collision collision) {
         // if object thrown hard enough on this, trigger the opening of the door
