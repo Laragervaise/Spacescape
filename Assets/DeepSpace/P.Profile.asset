@@ -73,7 +73,7 @@ MonoBehaviour:
     m_Enabled: 0
     m_Settings:
       focusDistance: 1
-      aperture: 1
+      aperture: 1.7
       focalLength: 1
       useCameraFov: 0
       kernelSize: 0
@@ -323,7 +323,7 @@ MonoBehaviour:
       mode: 0
       color: {r: 0, g: 0.07596874, b: 1, a: 1}
       center: {x: 0.5, y: 0.5}
-      intensity: 0.602
+      intensity: 0.492
       smoothness: 0.458
       roundness: 1
       mask: {fileID: 0}
