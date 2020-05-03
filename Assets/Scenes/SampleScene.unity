@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 58180221}
   m_Layer: 0
   m_Name: Cube (3)
-  m_TagString: Heavy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -228,7 +228,7 @@ GameObject:
   - component: {fileID: 138269780}
   m_Layer: 0
   m_Name: Cube (2)
-  m_TagString: Heavy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -531,7 +531,7 @@ GameObject:
   - component: {fileID: 260556230}
   m_Layer: 0
   m_Name: Cube (1)
-  m_TagString: Heavy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -649,11 +649,6 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6582963589376950680, guid: a698cffd515bed34bbe6c9630cd59ccb,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 2f9355647b2298340a45703d2e5049f9, type: 2}
     - target: {fileID: 6582963589376950685, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
       propertyPath: m_Name
@@ -662,7 +657,12 @@ PrefabInstance:
     - target: {fileID: 6582963589376950685, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
       propertyPath: m_TagString
-      value: NotDragable
+      value: Plier
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582963589376950685, guid: a698cffd515bed34bbe6c9630cd59ccb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6582963589376950686, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
@@ -722,7 +722,7 @@ PrefabInstance:
     - target: {fileID: 6582963589376950687, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8362980615260964485, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
@@ -731,31 +731,11 @@ PrefabInstance:
       objectReference: {fileID: 1308624276}
     - target: {fileID: 8362980615260964485, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
-      propertyPath: _PM
-      value: 
-      objectReference: {fileID: 1308624278}
-    - target: {fileID: 8362980615260964485, guid: a698cffd515bed34bbe6c9630cd59ccb,
-        type: 3}
-      propertyPath: _anchorSide
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362980615260964485, guid: a698cffd515bed34bbe6c9630cd59ccb,
-        type: 3}
-      propertyPath: _propulsionSpeed
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362980615260964485, guid: a698cffd515bed34bbe6c9630cd59ccb,
-        type: 3}
       propertyPath: _initialOffset
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8362980615260964485, guid: a698cffd515bed34bbe6c9630cd59ccb,
-        type: 3}
-      propertyPath: _tubeCylinderPrefab
-      value: 
-      objectReference: {fileID: 4430307690126311085, guid: d4eca6e17658bd4468b57c75ca2accb6,
-        type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: a698cffd515bed34bbe6c9630cd59ccb, type: 3}
 --- !u!1 &705507993
 GameObject:
@@ -863,7 +843,7 @@ GameObject:
   - component: {fileID: 850496675}
   m_Layer: 0
   m_Name: Cube (5)
-  m_TagString: Heavy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -996,10 +976,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1308624277}
   - component: {fileID: 1308624278}
+  - component: {fileID: 1308624280}
   - component: {fileID: 1308624279}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1033,6 +1014,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerMass: 20
   _bodySize: 1
+  _damping: 0.5
+  _minPlierSpeed: 0.1
+  _minPlayerSpeed: 0.1
+  _vibrationDuration: 0.2
   _leftController: {fileID: 404865568}
   _rightController: {fileID: 1736716859}
 --- !u!54 &1308624279
@@ -1043,14 +1028,28 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1308624276}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 20
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!136 &1308624280
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308624276}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.75
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.3, z: 0}
 --- !u!1 &1563365409
 GameObject:
   m_ObjectHideFlags: 0
@@ -1403,6 +1402,11 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4518665549472693895, guid: a698cffd515bed34bbe6c9630cd59ccb,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6582963589376950685, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
       propertyPath: m_Name
@@ -1411,7 +1415,12 @@ PrefabInstance:
     - target: {fileID: 6582963589376950685, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
       propertyPath: m_TagString
-      value: NotDragable
+      value: Plier
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582963589376950685, guid: a698cffd515bed34bbe6c9630cd59ccb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6582963589376950686, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
@@ -1471,7 +1480,7 @@ PrefabInstance:
     - target: {fileID: 6582963589376950687, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8362980615260964485, guid: a698cffd515bed34bbe6c9630cd59ccb,
         type: 3}
@@ -1499,5 +1508,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4430307690126311085, guid: d4eca6e17658bd4468b57c75ca2accb6,
         type: 3}
+    - target: {fileID: 8362980615260964485, guid: a698cffd515bed34bbe6c9630cd59ccb,
+        type: 3}
+      propertyPath: _anchorSide
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a698cffd515bed34bbe6c9630cd59ccb, type: 3}

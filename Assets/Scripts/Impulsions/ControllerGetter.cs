@@ -16,6 +16,7 @@ public class ControllerGetter : MonoBehaviour
     private bool _wasExtending = false;
     private bool _wasRetracting = false;
     private bool _wasCancelling = false;
+    private bool _wasGrabbing = false;
 
     public GameObject _plier;
     private HandPropeller _plierPropeller;
@@ -33,16 +34,6 @@ public class ControllerGetter : MonoBehaviour
         // Update Inputs
         OVRInput.Update();
 
-        // Update _propulsionSpeed
-        if(controllers) {
-            float factor;
-            if(_anchorSide == AnchorSideType.LeftHand) {
-                factor = OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger);
-            } else {
-                factor = OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger);
-            }
-            this._plierPropeller.UpdatePropulsionSpeed(factor);
-        }
     }
 
 
@@ -51,92 +42,33 @@ public class ControllerGetter : MonoBehaviour
     //    Retrieving Controls
     //
     //////////////////////
-    public bool getExtensionStart() {
-      bool extention_input;
-      float factor = 1.0f;
+    public float getPlierExtensionSpeed() {
+      float factor = 0.0f;
 
       if(controllers) {
           if(_anchorSide == AnchorSideType.LeftHand) {
-              factor = OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger);
-              extention_input = factor>0.1f;
+              factor = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick).y;
           } else {
-              factor = OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger);
-              extention_input = factor>0.1f;
+              factor = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick).y;
           }
       } else {
-          if(_anchorSide == AnchorSideType.LeftHand) extention_input = Input.GetKey("a");
-          else                                       extention_input = Input.GetKey("p");
-      }
-      //Returns true the first frame it is being pressed
-      if((!_wasExtending) & (extention_input)) {
-          this._plierPropeller.UpdatePropulsionSpeed(factor);
-          _wasExtending = true;
-          return true;
-      }
-      return false;
-    }
-
-
-    public bool getExtensionStop() {
-      bool extention_input;
-
-      if(controllers) {
-          if(_anchorSide == AnchorSideType.LeftHand) extention_input = OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) > 0.1f;
-          else                                       extention_input = OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.1f;
-      } else {
-          if(_anchorSide == AnchorSideType.LeftHand) extention_input = Input.GetKey("a");
-          else                                       extention_input = Input.GetKey("p");
+          if(_anchorSide == AnchorSideType.LeftHand) {
+            if(Input.GetKey("a")) factor = 1.0f;
+            if(Input.GetKey("z")) factor = -1.0f;
+          } else {
+            if(Input.GetKey("p")) factor = 1.0f;
+            if(Input.GetKey("o")) factor = -1.0f;
+          }
       }
 
-      // Returns true the first frame it is being released
-      if((_wasExtending) & (!extention_input)) {
-          this._plierPropeller.ResetPropulsionSpeed();
-          _wasExtending = false;
-          return true;
-      }
-      return false;
-    }
-
-    public bool getRetractionStart() {
-      bool retraction_input;
-      if(controllers) {
-          if(_anchorSide == AnchorSideType.LeftHand) retraction_input = OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger)>0.1f;
-          else                                       retraction_input = OVRInput.Get(OVRInput.Axis1D.SecondaryHandTrigger)>0.1f;
-      } else {
-          if(_anchorSide == AnchorSideType.LeftHand) retraction_input = Input.GetKey("z");
-          else                                       retraction_input = Input.GetKey("o");
-      }
-
-      //Returns true the first frame it is being pressed
-      if((!_wasRetracting) & (retraction_input)) {
-          _wasRetracting = true;
-          return true;
-      }
-      return false;
-    }
-
-    public bool getRetractionStop() {
-      bool retraction_input;
-      if(controllers) {
-          if(_anchorSide == AnchorSideType.LeftHand) retraction_input = OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger)>0.1f;
-          else                                       retraction_input = OVRInput.Get(OVRInput.Axis1D.SecondaryHandTrigger)>0.1f;
-      } else {
-          if(_anchorSide == AnchorSideType.LeftHand) retraction_input = Input.GetKey("z");
-          else                                       retraction_input = Input.GetKey("o");
-      }
-      //Returns true the first frame it is being released
-      if((_wasRetracting) & (!retraction_input)) {
-          _wasRetracting = false;
-          return true;
-      }
-      return false;
+      return factor;
     }
 
     public bool getCancel() {
       bool cancel_input;
       if(controllers) {
-          if(_anchorSide == AnchorSideType.LeftHand) cancel_input = OVRInput.Get(OVRInput.Button.Three);
-          else                                       cancel_input = OVRInput.Get(OVRInput.Button.One);
+          if(_anchorSide == AnchorSideType.LeftHand) cancel_input = OVRInput.Get(OVRInput.Button.PrimaryThumbstick);
+          else                                       cancel_input = OVRInput.Get(OVRInput.Button.SecondaryThumbstick);
       } else {
           if(_anchorSide == AnchorSideType.LeftHand) cancel_input = Input.GetKey("e");
           else                                       cancel_input = Input.GetKey("i");
@@ -144,6 +76,42 @@ public class ControllerGetter : MonoBehaviour
 
       //Returns true the first frame it is being pressed
       return cancel_input;
+    }
+
+    public bool getGrabbingStart() {
+        bool grabbing_input;
+        if(controllers) {
+            if(_anchorSide == AnchorSideType.LeftHand) grabbing_input = OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger)>0.1f;
+            else                                       grabbing_input = OVRInput.Get(OVRInput.Axis1D.SecondaryHandTrigger)>0.1f;
+        } else {
+            if(_anchorSide == AnchorSideType.LeftHand) grabbing_input = Input.GetKey("d");
+            else                                       grabbing_input = Input.GetKey("k");
+        }
+
+        //Returns true the first frame it is being pressed
+        if((!_wasGrabbing) & (grabbing_input)) {
+            _wasGrabbing = true;
+            return true;
+        }
+        return false;
+    }
+
+    public bool getGrabbingStop() {
+        bool grabbing_input;
+        if(controllers) {
+            if(_anchorSide == AnchorSideType.LeftHand) grabbing_input = OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger)>0.1f;
+            else                                       grabbing_input = OVRInput.Get(OVRInput.Axis1D.SecondaryHandTrigger)>0.1f;
+        } else {
+            if(_anchorSide == AnchorSideType.LeftHand) grabbing_input = Input.GetKey("d");
+            else                                       grabbing_input = Input.GetKey("k");
+        }
+
+        //Returns true the first frame it is being pressed
+        if((_wasGrabbing) & (!grabbing_input)) {
+            _wasGrabbing = false;
+            return true;
+        }
+        return false;
     }
 
 

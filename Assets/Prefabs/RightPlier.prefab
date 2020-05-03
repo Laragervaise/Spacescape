@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8362980615260964485}
   m_Layer: 0
   m_Name: RightPlier
-  m_TagString: Untagged
+  m_TagString: NotDragable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -90,7 +90,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6582963589376950685}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -107,7 +107,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -123,3 +123,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 205c4aae75fe0a1409c4c0624d5491b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _initialOffset: 0.25
+  _owner: {fileID: 0}
+  _anchorSide: 1
+  _tubeCylinderPrefab: {fileID: 4430307690126311085, guid: d4eca6e17658bd4468b57c75ca2accb6,
+    type: 3}
+  _initPropulsionSpeed: 3
+  _maxSpeed: 3
+  _time_buffer_attach: 0.5
+  _maxPlierDist: 4
+  _minDistToAnchor: 0.3
+  _speedFactor: 0.5

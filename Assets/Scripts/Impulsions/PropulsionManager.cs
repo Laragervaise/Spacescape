@@ -8,6 +8,10 @@ public class PropulsionManager : MonoBehaviour {
     //Public instances
     public float _playerMass=20.0f;
     public float _bodySize = 1.0f;
+    public float _damping = 0.1f;
+    public float _minPlierSpeed = 0.1f;
+    public double _minPlayerSpeed = 0.1;
+    public float _vibrationDuration = 0.2f;
     public GameObject _leftController;
     public GameObject _rightController;
 
@@ -33,6 +37,7 @@ public class PropulsionManager : MonoBehaviour {
     private Vector3 _goalDirection;                 //Camera Goal direction
     private Vector3 _lastPos;                       //Last position of the camera: used to compute _moving
     private Rigidbody _playerRigidBody;
+    private Collider _playerCollider;
 
 
     // Start is called before the first frame update
@@ -46,15 +51,17 @@ public class PropulsionManager : MonoBehaviour {
         _leftHand = GameObject.Find("LeftPlier");
         _rightHand = GameObject.Find("RightPlier");
         _playerRigidBody = this.GetComponent<Rigidbody>();
-
+        _playerRigidBody.isKinematic = false;
         _leftControllerGetter = _leftController.GetComponent<ControllerGetter>();
         _rightControllerGetter = _rightController.GetComponent<ControllerGetter>();
 
         _handPropellers = new HandPropeller[2]{_leftHand.GetComponent<HandPropeller>(),
                                                _rightHand.GetComponent<HandPropeller>()};
+
+        _playerRigidBody.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         /* For each plier, we have the following Behaviour:
             - If the player presses Extention input:
@@ -87,144 +94,175 @@ public class PropulsionManager : MonoBehaviour {
         */
         // LeftHand
         if(_leftControllerGetter.getCancel()) {
-          _handPropellers[0].ForceRetractHand();
-          _handAttachedHeavy[0] = false;
-          _forceRetract[0] = true;
+          OnCancelInput(0);
         } else {
-          if(_leftControllerGetter.getExtensionStart() && !_beingDragged && !_handAttachedHeavy[0]) {
-            _handPropellers[0].PropulseHand();
-          }
-          if(_leftControllerGetter.getExtensionStop() && !_beingDragged && !_handAttachedHeavy[0]) {
-            _handPropellers[0].StopPropulseHand();
-          }
-          if(_leftControllerGetter.getRetractionStart() && !_beingDragged) {
-            if(_handAttachedHeavy[0]) {
-                OnDragOwner(_handAttachedHeavyDirection[0],0);
-            } else {
-                _handPropellers[0].RetractHand();
+            float plierSpeed = _leftControllerGetter.getPlierExtensionSpeed();
+            if(plierSpeed>_minPlierSpeed  && !_beingDragged && !_handAttachedHeavy[0]) {
+              OnExtension(0, plierSpeed);
             }
-          }
-          if(_leftControllerGetter.getRetractionStop()) {
-            if(!_handAttachedHeavy[0] && !_forceRetract[0]) {
-                _handPropellers[0].StopRetractHand();
-            } else {
-                _beingDragged = false;
+            if(Mathf.Abs(plierSpeed)<_minPlierSpeed) {
+              if(!_beingDragged && !_handAttachedHeavy[0]) {
+                OnExtensionStop(0);
+              }
+              if(!_handAttachedHeavy[0] && !_forceRetract[0]) {
+                OnRetractionStop(0);
+              } else {
+                OnDragStop(0);
+              }
             }
-          }
+            if(plierSpeed<-_minPlierSpeed) {
+              if(_handAttachedHeavy[0]) {
+                  OnDragStart(_handAttachedHeavyDirection[0],0, -plierSpeed);
+              } else {
+                  OnRetraction(0, plierSpeed);
+              }
+            }
+            if(_leftControllerGetter.getGrabbingStart()) {
+              OnGrabStart(0);
+            }
+            if(_leftControllerGetter.getGrabbingStop()) {
+              OnGrabStop(0);
+            }
         }
+
         //RightHand
         if(_rightControllerGetter.getCancel()) {
-          _handPropellers[1].ForceRetractHand();
-          _handAttachedHeavy[1] = false;
-          _forceRetract[1] = true;
+          OnCancelInput(1);
         } else {
-          if(_rightControllerGetter.getExtensionStart() && !_beingDragged && !_handAttachedHeavy[1]) {
-            _handPropellers[1].PropulseHand();
-          }
-          if(_rightControllerGetter.getExtensionStop() && !_beingDragged && !_handAttachedHeavy[1]) {
-            _handPropellers[1].StopPropulseHand();
-          }
-          if(_rightControllerGetter.getRetractionStart() && !_beingDragged) {
-            if(_handAttachedHeavy[1]) {
-                OnDragOwner(_handAttachedHeavyDirection[1],1);
-            } else {
-                _handPropellers[1].RetractHand();
+            float plierSpeed = _rightControllerGetter.getPlierExtensionSpeed();
+            if(plierSpeed>_minPlierSpeed  && !_beingDragged && !_handAttachedHeavy[1]) {
+              OnExtension(1, plierSpeed);
             }
-          }
-          if(_rightControllerGetter.getRetractionStop()) {
-            if(!_handAttachedHeavy[1] && !_forceRetract[1]) {
-                _handPropellers[1].StopRetractHand();
-            } else {
-              _beingDragged = false;
+            if(Mathf.Abs(plierSpeed)<_minPlierSpeed) {
+              if(!_beingDragged && !_handAttachedHeavy[1]) {
+                OnExtensionStop(1);
+              }
+              if(!_handAttachedHeavy[1] && !_forceRetract[1]) {
+                OnRetractionStop(1);
+              } else {
+                OnDragStop(1);
+              }
             }
-          }
+            if(plierSpeed<-_minPlierSpeed) {
+              if(_handAttachedHeavy[1]) {
+                  OnDragStart(_handAttachedHeavyDirection[1],1, -plierSpeed);
+              } else {
+                  OnRetraction(1, plierSpeed);
+              }
+            }
+            if(_rightControllerGetter.getGrabbingStart()) {
+              OnGrabStart(1);
+            }
+            if(_rightControllerGetter.getGrabbingStop()) {
+              OnGrabStop(1);
+            }
         }
+        // Update position
+        _lastPos = this.transform.position;
 
-        _moving = isPlayerMoving();
-        //Movement if player is being dragged
-        /* We drag the player if there is a non-null goal direction and :
-              - it is being dragged
-            OR
-              - it is not being dragged, no plier is attached and the player is moving
-                  => Basically conserves the speed of the player when it as detached his plier while retracting
-        */
-        if((_goalDirection != Vector3.zero) &&
-                (_beingDragged ||
-                    (!_beingDragged && !_handAttachedHeavy[0] && !_handAttachedHeavy[1] && _moving)
-                )
-           ) {
-            // If the distance between the goal diraction and the player is big enough: move the player toward the position
-            if(Vector3.Distance(this.transform.position, _goalDirection) > _bodySize) {
-                this.transform.position = Vector3.MoveTowards(transform.position, _goalDirection, Time.deltaTime);
-            }
-              // Else : if it was being dragged: finish the dragging operation, and in both cases (was moving), remove goal diraction: stops motion
-              else {
-                if(_beingDragged) {
-                    _handPropellers[_draggingHand].OnDragFinished();
-                    _beingDragged = false;
-                    if(_draggingHand == 0){
-                        _handAttachedHeavy[0] = false;
-                        endedForceRetraction(0);
-                    } else {
-                        _handAttachedHeavy[1] = false;
-                        endedForceRetraction(1);
-                    }
+        //Movement Update
+        if(_beingDragged) {
+            if(Vector3.Distance(this.transform.position, _goalDirection) < _bodySize) {
+                OnDragStop(_draggingHand);
+                _handPropellers[_draggingHand].OnDragFinished();
+                if(_draggingHand == 0){
+                    _handAttachedHeavy[0] = false;
+                    endedForceRetraction(0);
+                } else {
+                    _handAttachedHeavy[1] = false;
+                    endedForceRetraction(0);
                 }
-                _goalDirection = Vector3.zero;
             }
         }
+        if (_playerRigidBody.velocity.magnitude < _minPlayerSpeed) _playerRigidBody.velocity = Vector3.zero;
     }
 
-    // See if player moved the last frame
-    private bool isPlayerMoving() {
-      float displacement = Vector3.Distance(this.transform.position, _lastPos);
-      _lastPos = this.transform.position;
+    public Vector3 GetTranslation() {
+         return this.transform.position - _lastPos;
+    }
 
-      return displacement>0.001f;
+    private void OnCancelInput(int handType) {
+        _handAttachedHeavy[handType] = false;
+        _forceRetract[handType] = true;
+        _handPropellers[handType].ForceRetractHand();
+    }
+
+    private void OnExtension(int handType, float speed) {
+        _handPropellers[handType].PropulseHand(speed);
+    }
+
+    private void OnExtensionStop(int handType) {
+        _handPropellers[handType].StopPropulseHand();
+    }
+
+    private void OnRetraction(int handType, float speed) {
+        _handPropellers[handType].RetractHand(speed);
+    }
+
+    private void OnRetractionStop(int handType) {
+        _handPropellers[handType].StopRetractHand();
+    }
+
+    private void OnGrabStart(int handType) {
+        _handPropellers[handType].StartGrabbingHand();
+    }
+
+    private void OnGrabStop(int handType) {
+        _handPropellers[handType].StopGrabbingHand();
+    }
+
+    // If the player decided to drag toward an object
+    private void OnDragStart(Vector3 goalDirection,int handType, float speed) {
+        // Apply Force toward goal Direction
+        if(!_beingDragged) {
+            _beingDragged = true;
+            _goalDirection = goalDirection;
+            _draggingHand = handType;
+            _handPropellers[(handType+1)%2].ForceRetractHand();
+            if(handType == 0) {
+                _handAttachedHeavy[1] = false;
+            } else {
+                _handAttachedHeavy[0] = false;
+            }
+        }
+        Vector3 forceDirection = goalDirection - this.transform.position;
+        _playerRigidBody.velocity = Vector3.Normalize(forceDirection)*speed;
+    }
+
+    private void OnDragStop(int handType) {
+        //Make velocity null
+        if(_handAttachedHeavy[handType]) {
+            _playerRigidBody.velocity = Vector3.zero;
+        }
+        _beingDragged = false;
+
     }
 
     // If a plier has attached a too heavy object to move
     public void OnAttachedPlierHeavier(Vector3 goalDirection,int handType) {
+        _playerRigidBody.velocity = Vector3.zero;
         if(handType == 0) {
             _handAttachedHeavy[0] = true;
             _handAttachedHeavyDirection[0] = goalDirection;
-            _leftControllerGetter.SetControllerVibrationOn(0.2f);
+            _leftControllerGetter.SetControllerVibrationOn(_vibrationDuration);
         }
         else {
             _handAttachedHeavy[1] = true;
             _handAttachedHeavyDirection[1] = goalDirection;
-            _rightControllerGetter.SetControllerVibrationOn(0.2f);
-        }
-    }
-
-    public void OnAttachedPlierObject(Vector3 goalDirection, int handType) {
-        if(handType == 0) {
-            _handAttachedHeavy[0] = true;
-            _handAttachedHeavyDirection[0] = goalDirection;
-            _leftControllerGetter.SetControllerVibrationOn(0.2f);
-        }
-        else {
-            _handAttachedHeavy[1] = true;
-            _handAttachedHeavyDirection[1] = goalDirection;
-            _rightControllerGetter.SetControllerVibrationOn(0.2f);
-        }
-    }
-
-    // If the player decided to drag toward an object
-    public void OnDragOwner(Vector3 goalDirection,int handType) {
-        _beingDragged = true;
-        _goalDirection = goalDirection;
-        _draggingHand = handType;
-        _handPropellers[(handType+1)%2].RetractHand();
-        if(handType == 0) {
-            _handAttachedHeavy[1] = false;
-        } else {
-            _handAttachedHeavy[0] = false;
+            _rightControllerGetter.SetControllerVibrationOn(_vibrationDuration);
         }
     }
 
     // This is being called when the propeller has reached its initial position.
     public void endedForceRetraction(int handType) {
         _forceRetract[handType] = false;
+    }
+
+    //TODO: ISSUE HERE DOES NOT ENTER IF KINEMATIC MODE IS ON. BUT IF IT IS ON: PLIERS CAN PUSH THE PLAYER
+    public void OnCollisionEnter(Collision other) {
+        if(other.transform.tag  != "Plier") {
+            Vector3 normal = other.GetContact(0).normal;
+            _playerRigidBody.velocity = Vector3.Reflect(_playerRigidBody.velocity, normal) * _damping;
+        }
     }
 }
