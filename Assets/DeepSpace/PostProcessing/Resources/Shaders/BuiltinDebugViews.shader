@@ -7,7 +7,8 @@ Shader "Hidden/Post FX/Builtin Debug Views"
 
         #pragma exclude_renderers d3d11_9x
 
-        sampler2D_float _CameraDepthTexture;
+        // sampler2D_float _CameraDepthTexture;
+        UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
         sampler2D_float _CameraDepthNormalsTexture;
         sampler2D_float _CameraMotionVectorsTexture;
 
@@ -30,7 +31,7 @@ Shader "Hidden/Post FX/Builtin Debug Views"
             float depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, UnityStereoScreenSpaceUVAdjust(i.uv, _CameraDepthTexture_ST));
             depth = Linear01Depth(depth) * _DepthScale;
             float3 d = depth.xxx;
-            
+
         #if !UNITY_COLORSPACE_GAMMA
             d = GammaToLinearSpace(d);
         #endif

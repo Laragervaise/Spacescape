@@ -37,7 +37,9 @@ struct OutputSolver
 sampler2D _HistoryTex;
 
 sampler2D _CameraMotionVectorsTexture;
-sampler2D _CameraDepthTexture;
+// sampler2D _CameraDepthTexture;
+UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
+
 
 float4 _HistoryTex_TexelSize;
 float4 _CameraDepthTexture_TexelSize;
