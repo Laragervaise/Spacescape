@@ -125,7 +125,7 @@ Shader "Hidden/Post FX/Screen Space Reflection"
         {
             float3 P;
             //UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
-            P.z = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, ssP.xy);
+            //P.z = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, ssP.xy);
 
             // Offset to pixel center
             // P = ReconstructCSPosition(float2(ssP) /*+ float2(0.5, 0.5)*/, P.z);
