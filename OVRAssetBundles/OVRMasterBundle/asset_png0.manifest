@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 3060940020
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 614f46f60984270f267a38b2b3d95f62
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2ed26e3ad9f6be9c24f85f5f5b54339d
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Oculus/VR/Textures/OculusTouchForRift/touchController_albedo.png
+- Assets/MASH Virtual/Assets/Texture/Doors_Doors_AO.png
+- Assets/MASH Virtual/Assets/Texture/Doors_Doors_AlbedoTransparency.png
+- Assets/MASH Virtual/Assets/Texture/Doors_Doors_Normal.png
+- Assets/Oculus/SampleFramework/Usage/Locomotion/Textures/metal_01_nml.png
+- Assets/MASH Virtual/Assets/Texture/Doors_Doors_MetallicSmoothness.png
+- Assets/Oculus/SampleFramework/Usage/Locomotion/Textures/metal_01_dif.png
+Dependencies: []

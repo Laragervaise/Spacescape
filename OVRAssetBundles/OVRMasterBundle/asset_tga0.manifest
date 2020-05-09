@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 2994979539
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4a7c44f1c1522b4e7543561b16a9e61e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2ed26e3ad9f6be9c24f85f5f5b54339d
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/PolyWorkshop/CardboardBoxesSet/Materials/Textures/cardboardBoxSet_Normal.tga
+- Assets/Oculus/SampleFramework/Usage/Locomotion/Textures/metal_01_msm.tga
+- Assets/Oculus/VR/Textures/OculusGoController/OculusGoController_albedo.tga
+- Assets/Oculus/VR/Textures/OculusTouchForQuestAndRiftS/OculusQuestTouchControllerTexture.tga
+- Assets/PolyWorkshop/CardboardBoxesSet/Materials/Textures/cardboardBoxSet_Diffuse.tga
+Dependencies: []
