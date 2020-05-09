@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/SampleScene_val.unity
+  - enabled: 0
+    path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/DeepVr_oculus.unity
+    guid: d25b54454a0ea75489771e623d5989a4
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: c485f012927d7419e88f1768b349fde7,
       type: 2}
