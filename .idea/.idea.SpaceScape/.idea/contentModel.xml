@@ -960,6 +960,7 @@
         </e>
         <e p="Script" t="Include">
           <e p="ActionOnCollision.cs" t="Include" />
+          <e p="ElevatorDownKinematic.cs" t="Include" />
           <e p="GrabbingAnchor.cs" t="Include" />
           <e p="GrabbingDetector.cs" t="Include" />
           <e p="handsCollision.cs" t="Include" />
@@ -972,6 +973,7 @@
           <e p="MyNewClass.cs" t="Include" />
           <e p="OpenDoor.cs" t="Include" />
           <e p="SwingOnlyButton.cs" t="Include" />
+          <e p="WallRepairElevator.cs" t="Include" />
         </e>
       </e>
       <e p="obj" t="ExcludeRecursive" />

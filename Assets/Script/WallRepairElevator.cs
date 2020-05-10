@@ -1,0 +1,31 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class WallRepairElevator : MonoBehaviour {
+    public GameObject[] swingables;
+    public ElevatorDownKinematic elevator;
+
+    private int buttonsLeft;
+    // Start is called before the first frame update
+    void Start() {
+        buttonsLeft = swingables.Length;
+        foreach (GameObject swingable in swingables)
+        {
+            swingable.GetComponent<SwingOnlyButton>().SetWallRepairElevator(this);
+        }
+    }
+
+    public void AddButtonDone() {
+        if (--buttonsLeft == 0) {
+            // Call the elevator
+            elevator.StartMoving();
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}

@@ -5,8 +5,14 @@ public class SwingOnlyButton : MonoBehaviour {
     public GameObject bat;
     public GameObject backButton;
     public GameObject cylinder;
+    private WallRepairElevator parentTrigger;
+    private bool doneTrigger = false;
     private Vector3 _lastPosition = Vector3.zero;
     private Vector3 _speed = Vector3.zero;
+
+    public void SetWallRepairElevator(WallRepairElevator parent) {
+        parentTrigger = parent;
+    }
 
     void FixedUpdate() {
         Vector3 position = bat.transform.position;
@@ -25,9 +31,13 @@ public class SwingOnlyButton : MonoBehaviour {
     }
 
     public void OnTriggerEnter(Collider other) {
-        if (other.gameObject == backButton) {
+        if (!doneTrigger && other.gameObject == backButton) {
             transform.position = backButton.transform.position;
             GetComponent<Rigidbody>().isKinematic = true;
+            doneTrigger = true;
+            if (parentTrigger != null) {
+                parentTrigger.AddButtonDone();
+            }
         }
     }
 
