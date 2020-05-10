@@ -151,9 +151,9 @@ MonoBehaviour:
   _tubeCylinderPrefab: {fileID: 0}
   _handController: {fileID: 0}
   _initPropulsionSpeed: 3
-  _maxSpeed: 3
+  _maxSpeed: 2
   _time_buffer_attach: 0.5
   _time_buffer_pushed: 1
   _maxPlierDist: 4
   _minDistToAnchor: 0.3
-  _speedFactor: 0.5
+  _speedFactor: 0.2

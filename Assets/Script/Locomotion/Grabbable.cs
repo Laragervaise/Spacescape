@@ -22,6 +22,7 @@ public class Grabbable : MonoBehaviour
     {
         if( (_is_grabbed)  & (_grabAnchor!=null) ) {
             this.transform.position = _grabAnchor.transform.position;
+            this.transform.rotation = _grabAnchor.transform.rotation;
         }
     }
 
