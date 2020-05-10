@@ -11,9 +11,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/DeepVr_oculus.unity
     guid: d25b54454a0ea75489771e623d5989a4
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/DeepVr.unity
     guid: ed70085d18bd4b741b78c094e67784e9
+  - enabled: 1
+    path: Assets/Scenes/SampleScene_nico.unity
+    guid: 5d5f250a69e53ba4895af285666672fd
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: c485f012927d7419e88f1768b349fde7,
       type: 2}

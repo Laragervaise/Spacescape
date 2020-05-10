@@ -8,6 +8,7 @@ TagManager:
   - glass
   - NotDragable
   - Plier
+  - buttonSwing
   layers:
   - Default
   - TransparentFX

@@ -69,7 +69,7 @@ public class HandPropeller : MonoBehaviour
 
         _propulsionSpeed = 0.0f;
         _ownerPM = _owner.GetComponent<PropulsionManager>();
-        _anchorHandTransform = _handController.transform.parent;
+        _anchorHandTransform = _handController.transform;
         _plierRenderer = this.GetComponent<Renderer>();
         _initColor = _plierRenderer.material.color;
 
@@ -237,15 +237,15 @@ public class HandPropeller : MonoBehaviour
     //
     ////////////////
     public void OnTriggerEnter(Collider other) {
-        /*
-        if((other.gameObject.tag != "Plier") & (other.gameObject.tag != "Player") & (!_attached) & (!_grabbing) & (Time.time - _time_pushed > _time_buffer_pushed)) {
+        
+        /*if((other.gameObject.tag != "Plier") & (other.gameObject.tag != "Player") & (!_attached) /*& (!_grabbing)*//* & (Time.time - _time_pushed > _time_buffer_pushed)) {
             _time_pushed = Time.time;
             float magnitude = _speedLocal.magnitude;
             magnitude = Mathf.Min(magnitude*_speedFactor, _maxSpeed);
             _owner.GetComponent<Rigidbody>().velocity = Vector3.Normalize(_speed-_owner.GetComponent<Rigidbody>().velocity) * (-magnitude);
 
-        }
-        */
+        }*/
+        
         if((other.gameObject.tag != "Plier") & (other.gameObject.tag != "Player")) {
             //_freeze_propulsion = true;
             ResetPropulsionSpeed();

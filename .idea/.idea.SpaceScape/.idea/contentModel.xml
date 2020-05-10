@@ -971,14 +971,7 @@
           </e>
           <e p="MyNewClass.cs" t="Include" />
           <e p="OpenDoor.cs" t="Include" />
-        </e>
-        <e p="Scripts" t="Include">
-          <e p="handsCollision.cs" t="Include" />
-          <e p="Impulsions" t="Include">
-            <e p="ControllerGetter.cs" t="Include" />
-            <e p="HandPropeller.cs" t="Include" />
-            <e p="PropulsionManager.cs" t="Include" />
-          </e>
+          <e p="SwingOnlyButton.cs" t="Include" />
         </e>
       </e>
       <e p="obj" t="ExcludeRecursive" />
