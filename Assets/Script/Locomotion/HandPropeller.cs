@@ -16,6 +16,8 @@ public class HandPropeller : MonoBehaviour
     public AnchorSideType _anchorSide;
     public GameObject _tubeCylinderPrefab;
     public GameObject _handController;
+    public Mesh _grabbingMesh;
+    public Mesh _ungrabbingMesh;
 
     public float _initPropulsionSpeed=3.0f;
     public float _maxSpeed = 3.0f ;
@@ -36,8 +38,6 @@ public class HandPropeller : MonoBehaviour
     private Quaternion _collisionOrientation;
     private Quaternion _initOrient;
     private GameObject _tubeCylinder;
-    private Renderer _plierRenderer;
-    private Color _initColor;
     private float _propulsionSpeed;
 
     // State variables
@@ -70,20 +70,7 @@ public class HandPropeller : MonoBehaviour
         _propulsionSpeed = 0.0f;
         _ownerPM = _owner.GetComponent<PropulsionManager>();
         _anchorHandTransform = _handController.transform;
-        _plierRenderer = this.GetComponent<Renderer>();
-        _initColor = _plierRenderer.material.color;
 
-        //Initialize position
-        //TODO : COMMENT THIS ON VR , USED FOR COMPUTER TESTING
-/*
-        if((int)_anchorSide == 0) {
-            this.transform.position += this.transform.forward * _initialOffset * 2;
-            this.transform.localRotation = Quaternion.Euler(0, -90, 0);
-        } else {
-            this.transform.position += this.transform.forward * _initialOffset * 2;
-            this.transform.localRotation = Quaternion.Euler(0, 90, 0);
-        }
-*/
         this.transform.position = _anchorHandTransform.position;
         this.transform.rotation = _anchorHandTransform.rotation;
         //this.transform.localRotation *= Quaternion.Euler(90, 90, 0);
@@ -101,6 +88,9 @@ public class HandPropeller : MonoBehaviour
         _speed = Vector3.zero;
         _time_attached = Time.time;
         UpdateCylinderPosition();
+
+        //Mesh initialization;
+        this.GetComponent<MeshFilter>().mesh = _ungrabbingMesh;
     }
 
     void FixedUpdate()
@@ -204,10 +194,12 @@ public class HandPropeller : MonoBehaviour
     }
 
     public void StartGrabbingHand() {
+        SetGrabbingMesh();
         _grabbing = true;
     }
 
     public void StopGrabbingHand() {
+        SetUnGrabbingMesh();
         _grabbing = false;
         _attached = false;
         _attached_object = false;
@@ -237,7 +229,7 @@ public class HandPropeller : MonoBehaviour
     //
     ////////////////
     public void OnTriggerEnter(Collider other) {
-        
+
         if((other.gameObject.tag != "Plier") & (other.gameObject.tag != "Player") & (!_attached) & (Time.time - _time_pushed > _time_buffer_pushed)) {
             _time_pushed = Time.time;
             float magnitude = _speedLocal.magnitude;
@@ -245,7 +237,7 @@ public class HandPropeller : MonoBehaviour
             _owner.GetComponent<Rigidbody>().velocity = Vector3.Normalize(_speed-_owner.GetComponent<Rigidbody>().velocity) * (-magnitude);
 
         }
-        
+
         if((other.gameObject.tag != "Plier") & (other.gameObject.tag != "Player")) {
             //_freeze_propulsion = true;
             ResetPropulsionSpeed();
@@ -296,9 +288,6 @@ public class HandPropeller : MonoBehaviour
                   //Attract Player in direction
                   _ownerPM.OnAttachedPlierObject(this.transform.position, (int)_anchorSide, isHeavy);
               }
-
-            //Change Material
-            _plierRenderer.material.SetColor("_Color", Color.white);
         }
 
         //TODO: Prevent from entering object =>
@@ -309,7 +298,6 @@ public class HandPropeller : MonoBehaviour
     }
 
     public void OnTriggerExit(Collider other) {
-        _plierRenderer.material.SetColor("_Color", _initColor);
         _freeze_propulsion = false;
         _collisionSpeedEnter = Vector3.zero;
         /*
@@ -348,6 +336,19 @@ public class HandPropeller : MonoBehaviour
 
       }
     }
+    /////////////
+    //
+    // Mesh Change
+    //
+    /////////////
 
+
+    private void SetGrabbingMesh() {
+        this.GetComponent<MeshFilter>().mesh = _grabbingMesh;
+    }
+
+    private void SetUnGrabbingMesh() {
+        this.GetComponent<MeshFilter>().mesh = _ungrabbingMesh;
+    }
 
 }

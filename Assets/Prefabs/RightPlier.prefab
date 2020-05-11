@@ -11,10 +11,9 @@ GameObject:
   - component: {fileID: 6582963589376950686}
   - component: {fileID: 6582963589376950681}
   - component: {fileID: 6582963589376950680}
-  - component: {fileID: 6582963589376950687}
   - component: {fileID: 4518665549472693895}
-  - component: {fileID: 42782966442619417}
   - component: {fileID: 7837046346061004350}
+  - component: {fileID: 3581627272819754553}
   m_Layer: 0
   m_Name: RightPlier
   m_TagString: NotDragable
@@ -83,19 +82,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &6582963589376950687
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6582963589376950685}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4518665549472693895
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -112,27 +98,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &42782966442619417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6582963589376950685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd425c2d06f39bf4899d07c05d0f10eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grabBegin: 0.55
-  grabEnd: 0.35
-  m_parentHeldObject: 0
-  m_moveHandPosition: 0
-  m_gripTransform: {fileID: 0}
-  m_grabVolumes: []
-  m_controller: 0
-  m_parentTransform: {fileID: 0}
-  m_player: {fileID: 0}
 --- !u!114 &7837046346061004350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +115,8 @@ MonoBehaviour:
   _anchorSide: 0
   _tubeCylinderPrefab: {fileID: 0}
   _handController: {fileID: 0}
+  _grabbingMesh: {fileID: 0}
+  _ungrabbingMesh: {fileID: 0}
   _initPropulsionSpeed: 3
   _maxSpeed: 2
   _time_buffer_attach: 0.5
@@ -157,3 +124,16 @@ MonoBehaviour:
   _maxPlierDist: 4
   _minDistToAnchor: 0.3
   _speedFactor: 0.2
+--- !u!135 &3581627272819754553
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6582963589376950685}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.1
+  m_Center: {x: 0, y: 0.3, z: 0}
