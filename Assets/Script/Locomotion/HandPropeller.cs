@@ -148,6 +148,7 @@ public class HandPropeller : MonoBehaviour
                 Vector3 new_displacement = (this.transform.position - _lastPosition);
                 if(Vector3.Dot(_collisionSpeedEnter, new_displacement) > 0) {
                     this.transform.position = _lastPosition;
+                    this.transform.rotation = _lastRotAnchor;
                 }
             }
         }
@@ -217,7 +218,7 @@ public class HandPropeller : MonoBehaviour
 
     private void UpdateCylinderPosition() {
         _tubeCylinder.transform.position = (_anchorHandTransform.transform.position+this.transform.position)/2;
-        _tubeCylinder.transform.LookAt(this.transform.position);
+        _tubeCylinder.transform.LookAt(this.transform.position + Vector3.up*0.01f);
         _tubeCylinder.transform.rotation *= Quaternion.Euler(90.0f, 0.0f, 0.0f);
         _tubeCylinder.transform.localScale = new Vector3(0.1f,0.01f,0.1f)
                                            + Vector3.up * Vector3.Distance(_anchorHandTransform.transform.position,this.transform.position) / 2;
@@ -256,28 +257,25 @@ public class HandPropeller : MonoBehaviour
               _time_attached = Time.time;
               bool isHeavy;
 
-              // We assume the grabbed object is much lighter than the player
-              // Compute center of mass between plier(with object mass) and player with body mass
-              if(other.attachedRigidbody != null ) {
+              //Grab light object
+              if(other.GetComponent<Grabbable>() != null) {
                   _attached = false;
                   _attached_object = true;
                   isHeavy = false;
-                  float total_mass = _ownerPM._playerMass + other.attachedRigidbody.mass;
-                  Vector3 center_of_mass = _owner.transform.position*_ownerPM._playerMass/total_mass
-                                         + this.transform.position*other.attachedRigidbody.mass/total_mass;
+                  _grabbedObject = other.gameObject.GetComponent<Grabbable>();
+                  _grabbedObject.SetKinematic(true);
+                  _grabbedObject.OnGrab(this.gameObject);
+                  _freeze_propulsion = false;
 
-                  //Grab object
-                  if(other.GetComponent<Grabbable>() != null) {
-                      _grabbedObject = other.gameObject.GetComponent<Grabbable>();
-                      _grabbedObject.SetKinematic(true);
-                      _grabbedObject.OnGrab(this.gameObject);
-                      //_grabbedObject.transform.parent = this.transform;
-                      _freeze_propulsion = false;
+                  if(other.attachedRigidbody != null ) {
+                      // Compute center of mass between plier(with object mass) and player with body mass
+                      float total_mass = _ownerPM._playerMass + other.attachedRigidbody.mass;
+                      Vector3 center_of_mass = _owner.transform.position*_ownerPM._playerMass/total_mass
+                                             + this.transform.position*other.attachedRigidbody.mass/total_mass;
+                      _ownerPM.OnAttachedPlierObject(center_of_mass, (int)_anchorSide, isHeavy);
+                  } else {
+                      _ownerPM.OnAttachedPlierObject(this.transform.position, (int)_anchorSide, isHeavy);
                   }
-
-                  _ownerPM.OnAttachedPlierObject(center_of_mass, (int)_anchorSide, isHeavy);
-
-
               } else {
                   //Attached to heavy object
                   ResetPropulsionSpeed();
@@ -289,12 +287,6 @@ public class HandPropeller : MonoBehaviour
                   _ownerPM.OnAttachedPlierObject(this.transform.position, (int)_anchorSide, isHeavy);
               }
         }
-
-        //TODO: Prevent from entering object =>
-        // Compute direction of speed when entering.
-        // Project new speed on old speed
-        // If result is positive => Freeze position
-
     }
 
     public void OnTriggerExit(Collider other) {
@@ -329,7 +321,6 @@ public class HandPropeller : MonoBehaviour
     public void OnGrabFinish(Grabbable grabbed) {
       if(grabbed != null) {
           grabbed.SetKinematic(false);
-          //grabbed.transform.parent = null;
           grabbed.OnRelease();
           grabbed.GetComponent<Rigidbody>().velocity = _speed;
           grabbed = null;
