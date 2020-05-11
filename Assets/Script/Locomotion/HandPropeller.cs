@@ -219,7 +219,7 @@ public class HandPropeller : MonoBehaviour
         _tubeCylinder.transform.position = (_anchorHandTransform.transform.position+this.transform.position)/2;
         _tubeCylinder.transform.LookAt(this.transform.position);
         _tubeCylinder.transform.rotation *= Quaternion.Euler(90.0f, 0.0f, 0.0f);
-        _tubeCylinder.transform.localScale = new Vector3(0.1f,0.0f,0.1f)
+        _tubeCylinder.transform.localScale = new Vector3(0.1f,0.01f,0.1f)
                                            + Vector3.up * Vector3.Distance(_anchorHandTransform.transform.position,this.transform.position) / 2;
     }
 
