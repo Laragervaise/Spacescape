@@ -963,15 +963,14 @@
           <e p="ElevatorDownKinematic.cs" t="Include" />
           <e p="GrabbingAnchor.cs" t="Include" />
           <e p="GrabbingDetector.cs" t="Include" />
-          <e p="handsCollision.cs" t="Include" />
           <e p="Locomotion" t="Include">
             <e p="ControllerGetter.cs" t="Include" />
             <e p="Grabbable.cs" t="Include" />
             <e p="HandPropeller.cs" t="Include" />
             <e p="PropulsionManager.cs" t="Include" />
           </e>
-          <e p="MyNewClass.cs" t="Include" />
           <e p="OpenDoor.cs" t="Include" />
+          <e p="PlayTuto.cs" t="Include" />
           <e p="SwingOnlyButton.cs" t="Include" />
           <e p="WallRepairElevator.cs" t="Include" />
         </e>
