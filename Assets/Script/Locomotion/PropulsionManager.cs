@@ -59,6 +59,10 @@ public class PropulsionManager : MonoBehaviour {
                                                _rightHand.GetComponent<HandPropeller>()};
 
         _playerRigidBody.constraints = RigidbodyConstraints.FreezeRotation;
+        
+        // Retract hands at the beginning as they are not always by default
+        OnCancelInput(0);
+        OnCancelInput(1);
     }
 
     void FixedUpdate()

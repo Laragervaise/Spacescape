@@ -7,7 +7,8 @@ public class Grabbable : MonoBehaviour {
     public Vector3 _offsetPositionOnPlier = new Vector3(0, 0, 0.8f);
 
     //private instances
-    private bool _is_grabbed = false;
+    [HideInInspector]
+    public bool _is_grabbed = false;
     private GameObject _grabAnchor = null;
 
     // Update is called once per frame
