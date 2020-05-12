@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2744748880648950288}
   - component: {fileID: 8385703407076971177}
   - component: {fileID: 2960756079109335726}
+  - component: {fileID: 1937973405179281172}
   m_Layer: 9
   m_Name: RightPlier
   m_TagString: Plier
@@ -30,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 4898133473954557194}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -4, z: 28}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 0.12, y: 0.12, z: 0.12}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -137,7 +138,20 @@ SphereCollider:
   m_GameObject: {fileID: 4898133473954557194}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 1.1
   m_Center: {x: 0, y: 0.3, z: 2}
+--- !u!65 &1937973405179281172
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4898133473954557194}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.8, y: 0.5, z: 0.6}
+  m_Center: {x: 0.035887986, y: -0.031085968, z: 2.53}

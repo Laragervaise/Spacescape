@@ -2031,7 +2031,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _eulerAngleOffset: {x: 0, y: 0, z: 0}
   _offsetPosition: {x: 0, y: 0, z: 0}
-  _offsetPositionOnPlier: {x: 0, y: 0, z: 1}
+  _offsetPositionOnPlier: {x: 0, y: 0, z: 0.5}
   _is_grabbed: 0
 --- !u!1 &147772601
 GameObject:
@@ -3023,7 +3023,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _eulerAngleOffset: {x: 0, y: -90, z: 0}
   _offsetPosition: {x: 0, y: 0, z: 0}
-  _offsetPositionOnPlier: {x: 0, y: 0, z: 0.8}
+  _offsetPositionOnPlier: {x: 0, y: 0, z: 0.5}
   _is_grabbed: 0
 --- !u!1 &263080223
 GameObject:
@@ -3134,7 +3134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _eulerAngleOffset: {x: 0, y: 0, z: 0}
   _offsetPosition: {x: 0, y: 0, z: 0}
-  _offsetPositionOnPlier: {x: 0, y: 0, z: 1}
+  _offsetPositionOnPlier: {x: 0, y: 0, z: 0.5}
   _is_grabbed: 0
 --- !u!54 &263080229
 Rigidbody:
@@ -10548,7 +10548,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _eulerAngleOffset: {x: 0, y: 0, z: 0}
   _offsetPosition: {x: 0, y: 0, z: 0}
-  _offsetPositionOnPlier: {x: 0, y: 0, z: 1}
+  _offsetPositionOnPlier: {x: 0, y: 0, z: 0.5}
   _is_grabbed: 0
 --- !u!54 &930885518
 Rigidbody:
@@ -11140,8 +11140,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _eulerAngleOffset: {x: 0, y: 0, z: 0}
-  _offsetPosition: {x: 0, y: 0, z: 0}
-  _offsetPositionOnPlier: {x: 0, y: 0, z: 0.8}
+  _offsetPosition: {x: 0, y: 0.3, z: 0}
+  _offsetPositionOnPlier: {x: 0, y: 0, z: 0.5}
   _is_grabbed: 0
 --- !u!65 &1017213903
 BoxCollider:
@@ -14125,7 +14125,7 @@ GameObject:
   - component: {fileID: 1253079192}
   - component: {fileID: 1253079191}
   - component: {fileID: 1253079197}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: fill-the-box tuto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14604,7 +14604,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _eulerAngleOffset: {x: 0, y: 0, z: 0}
   _offsetPosition: {x: 0, y: 0, z: 0}
-  _offsetPositionOnPlier: {x: 0, y: 0, z: 0.8}
+  _offsetPositionOnPlier: {x: 0, y: 0, z: 0.5}
   _is_grabbed: 0
 --- !u!1 &1272272795
 GameObject:
@@ -21064,6 +21064,11 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3581627272819754553, guid: e596aa679c9a2a04fb360974fa52e85b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6582963589376950680, guid: e596aa679c9a2a04fb360974fa52e85b,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -21155,6 +21160,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6582963589376950686, guid: e596aa679c9a2a04fb360974fa52e85b,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582963589376950686, guid: e596aa679c9a2a04fb360974fa52e85b,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582963589376950686, guid: e596aa679c9a2a04fb360974fa52e85b,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.12
+      objectReference: {fileID: 0}
     - target: {fileID: 7837046346061004350, guid: e596aa679c9a2a04fb360974fa52e85b,
         type: 3}
       propertyPath: _owner
@@ -21205,6 +21225,19 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1888803294}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &1888803297
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888803296}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.8, y: 0.5, z: 0.6}
+  m_Center: {x: 0.035887986, y: -0.031085968, z: 2.53}
 --- !u!1 &1893525021
 GameObject:
   m_ObjectHideFlags: 0
@@ -22448,7 +22481,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _eulerAngleOffset: {x: 0, y: 0, z: 0}
   _offsetPosition: {x: 0, y: 0, z: 0}
-  _offsetPositionOnPlier: {x: 0, y: 0, z: 1}
+  _offsetPositionOnPlier: {x: 0, y: 0, z: 0.5}
   _is_grabbed: 0
 --- !u!54 &2041679425
 Rigidbody:

@@ -126,4 +126,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _eulerAngleOffset: {x: 0, y: 0, z: 0}
   _offsetPosition: {x: 0, y: 0, z: 0}
-  _offsetPositionOnPlier: {x: 0, y: 0, z: 1}
+  _offsetPositionOnPlier: {x: 0, y: 0, z: 0.5}
+  _is_grabbed: 0

@@ -4,7 +4,7 @@ public class Grabbable : MonoBehaviour {
     //public instances
     public Vector3 _eulerAngleOffset = Vector3.zero;
     public Vector3 _offsetPosition = Vector3.zero;
-    public Vector3 _offsetPositionOnPlier = new Vector3(0, 0, 0.8f);
+    public Vector3 _offsetPositionOnPlier = new Vector3(0, 0, 0.5f);
 
     //private instances
     [HideInInspector]
