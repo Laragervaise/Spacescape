@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Script/PlayTuto.cs.meta
 guid: eecb5a465f5e04db893cd6632869344a
+=======
+guid: 904b61dc4e80fb24aba31fa9a6057f19
+>>>>>>> 8e7af472c88c899f6d2b24794a3088ad4504bf6c:Assets/Script/MyNewClass.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
