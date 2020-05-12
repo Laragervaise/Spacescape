@@ -8,7 +8,7 @@ public class PropulsionManager : MonoBehaviour {
     //Public instances
     public float _playerMass=20.0f;
     public float _bodySize = 1.0f;
-    public float _damping = 0.1f;
+    public float _damping = 0.001f;
     public float _minPlierSpeed = 0.1f;
     public double _minPlayerSpeed = 0.1;
     public float _vibrationDuration = 0.2f;
@@ -213,11 +213,12 @@ public class PropulsionManager : MonoBehaviour {
             _beingDragged = true;
             _goalDirection = goalDirection;
             _draggingHand = handType;
-            _handPropellers[(handType+1)%2].ForceRetractHand();
-            if(handType == 0) {
-                _handAttachedHeavy[1] = false;
-            } else {
-                _handAttachedHeavy[0] = false;
+
+
+            //If the other hand is attached to a wall, force retract it. Not if it is attacehd to an object.
+            if(_handAttachedHeavy[(handType+1)%2]) {
+                _handPropellers[(handType+1)%2].ForceRetractHand();
+                _handAttachedHeavy[(handType+1)%2] = false;
             }
         }
         Vector3 forceDirection = goalDirection - this.transform.position;

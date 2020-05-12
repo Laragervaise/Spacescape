@@ -69,7 +69,7 @@ public class HandPropeller : MonoBehaviour
 
         _propulsionSpeed = 0.0f;
         _ownerPM = _owner.GetComponent<PropulsionManager>();
-        _anchorHandTransform = _handController.transform.parent;
+        _anchorHandTransform = _handController.transform;
         _plierRenderer = this.GetComponent<Renderer>();
         _initColor = _plierRenderer.material.color;
 
