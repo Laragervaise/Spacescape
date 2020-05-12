@@ -32,6 +32,20 @@ public class PlayTuto : MonoBehaviour
         }
     }
 
+    /*void OnCollisionEnter()
+    {
+        if (!alreadyPlayed)
+        {
+            audio.PlayOneShot(SoundToPlay, Volume);
+            alreadyPlayed = true;
+        } 
+        else if (OVRInput.Get(OVRInput.Button.One))
+        {
+            audio.PlayOneShot(SoundToPlay, Volume);
+            StartCoroutine(Break(duration));
+        }
+    }*/
+
     IEnumerator Break(float duration)
     {
         yield return new WaitForSeconds(duration);
