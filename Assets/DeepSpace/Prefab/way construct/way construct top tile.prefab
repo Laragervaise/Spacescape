@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4771575045892772}
   - component: {fileID: 33209482890592386}
   - component: {fileID: 23359058522183716}
-  - component: {fileID: 8246007382408856449}
+  - component: {fileID: 501083012545778064}
   m_Layer: 0
   m_Name: way construct top tile
   m_TagString: Untagged
@@ -80,7 +80,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &8246007382408856449
+--- !u!64 &501083012545778064
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

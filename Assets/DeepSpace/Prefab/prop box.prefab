@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 65338207515240120}
   - component: {fileID: 6346273187553671963}
   - component: {fileID: 1805854142323986539}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: prop box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,6 +107,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21804724fe6faf24b822248d8dc9c8c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _eulerAngleOffset: {x: 0, y: 0, z: 0}
+  _offsetPosition: {x: 0, y: 0, z: 0}
+  _offsetPositionOnPlier: {x: 0, y: 0, z: 1}
 --- !u!54 &1805854142323986539
 Rigidbody:
   m_ObjectHideFlags: 0

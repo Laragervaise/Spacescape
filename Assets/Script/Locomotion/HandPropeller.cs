@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 
-
-public class HandPropeller : MonoBehaviour
-{
+public class HandPropeller : MonoBehaviour {
     // Public variables
     public enum AnchorSideType : int {
         LeftHand = 0,
         RightHand = 1
     };
+
     public float _initialOffset = 0.2f;
     public GameObject _owner;
     public AnchorSideType _anchorSide;
@@ -19,8 +19,8 @@ public class HandPropeller : MonoBehaviour
     public Mesh _grabbingMesh;
     public Mesh _ungrabbingMesh;
 
-    public float _initPropulsionSpeed=3.0f;
-    public float _maxSpeed = 3.0f ;
+    public float _initPropulsionSpeed = 3.0f;
+    public float _maxSpeed = 3.0f;
     public float _time_buffer_attach = 0.5f;
     public float _time_buffer_pushed = 1.0f;
     public float _maxPlierDist = 4.0f;
@@ -59,13 +59,14 @@ public class HandPropeller : MonoBehaviour
     private Quaternion _lastRotAnchor;
     private Vector3 _collisionSpeedEnter = Vector3.zero;
 
-    void Start()
-    {
+    void Start() {
         // Initialize instances
         _handRigidBody = this.GetComponent<Rigidbody>();
         _handRigidBody.interpolation = RigidbodyInterpolation.Interpolate;
         _handRigidBody.isKinematic = true;
-        _handRigidBody.constraints = RigidbodyConstraints.FreezeRotation;// | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
+        _handRigidBody.constraints =
+            RigidbodyConstraints
+                .FreezeRotation; // | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
 
         _propulsionSpeed = 0.0f;
         _ownerPM = _owner.GetComponent<PropulsionManager>();
@@ -80,7 +81,7 @@ public class HandPropeller : MonoBehaviour
         _lastRotAnchor = _anchorHandTransform.rotation;
 
         //Instantiate hand cylinder
-        _tubeCylinder = Instantiate(_tubeCylinderPrefab,Vector3.zero, Quaternion.identity);
+        _tubeCylinder = Instantiate(_tubeCylinderPrefab, Vector3.zero, Quaternion.identity);
         _tubeCylinder.transform.parent = this.transform.parent;
 
         _lastPosition = transform.position;
@@ -91,19 +92,21 @@ public class HandPropeller : MonoBehaviour
 
         //Mesh initialization;
         this.GetComponent<MeshFilter>().mesh = _ungrabbingMesh;
+
+        // Retract hands at the beginning as they are not always by default
+        Task.Delay(500).ContinueWith(t => ForceRetractHand());
     }
 
-    void FixedUpdate()
-    {
-      //Plier positions
-      Vector3 position = transform.position;
-      Vector3 positionLocal = transform.localPosition;
-      _speed = (position - _lastPosition)/Time.deltaTime;
-      _speedLocal = (positionLocal - _lastPositionLocal)/Time.deltaTime;
-      _lastPosition = position;
-      _lastPositionLocal = positionLocal;
-      // If the plier is attached : Freeze its position
-        if(_attached) {
+    void FixedUpdate() {
+        //Plier positions
+        Vector3 position = transform.position;
+        Vector3 positionLocal = transform.localPosition;
+        _speed = (position - _lastPosition) / Time.deltaTime;
+        _speedLocal = (positionLocal - _lastPositionLocal) / Time.deltaTime;
+        _lastPosition = position;
+        _lastPositionLocal = positionLocal;
+        // If the plier is attached : Freeze its position
+        if (_attached) {
             this.transform.position = _collisionPosition;
             this.transform.rotation = _collisionOrientation;
         }
@@ -111,30 +114,34 @@ public class HandPropeller : MonoBehaviour
         // If the plier is being propelled => Move forward according to strengh given in propulsionSpeed
         // If retracted => Retract until close enough
         else {
-
             // Update pliers position with respect to handAnchor
-            Quaternion angle = _anchorHandTransform.rotation*Quaternion.Inverse(_lastRotAnchor);
-            if(angle != new Quaternion(0.0f,0.0f,0.0f,1.0f)){
-              //Not completely working ... ?
-              this.transform.RotateAround(_anchorHandTransform.position, Vector3.up, angle.eulerAngles.y);
-              this.transform.RotateAround(_anchorHandTransform.position, Vector3.right, angle.eulerAngles.x);
-              this.transform.RotateAround(_anchorHandTransform.position, Vector3.forward, angle.eulerAngles.z);
+            Quaternion angle = _anchorHandTransform.rotation * Quaternion.Inverse(_lastRotAnchor);
+            if (angle != new Quaternion(0.0f, 0.0f, 0.0f, 1.0f)) {
+                //Not completely working ... ?
+                this.transform.RotateAround(_anchorHandTransform.position, Vector3.up, angle.eulerAngles.y);
+                this.transform.RotateAround(_anchorHandTransform.position, Vector3.right, angle.eulerAngles.x);
+                this.transform.RotateAround(_anchorHandTransform.position, Vector3.forward, angle.eulerAngles.z);
             }
 
             this.transform.position += (_anchorHandTransform.position - _lastPostionAnchor);
 
             // Propulsion
-            if(_propulsionSpeed>0.1f) {
-                if(Vector3.Distance(this.transform.position, _owner.transform.position)<_maxPlierDist) {
-                    this.transform.position = this.transform.position + this.transform.forward * Time.deltaTime * _propulsionSpeed;
+            if (_propulsionSpeed > 0.1f) {
+                if (Vector3.Distance(this.transform.position, _owner.transform.position) < _maxPlierDist) {
+                    this.transform.position = this.transform.position +
+                                              this.transform.forward * Time.deltaTime * _propulsionSpeed;
                 }
             }
 
             //Retraction
-            else if(_propulsionSpeed<-0.1f || _forceRetract) {
-                if(_forceRetract) this.transform.position = Vector3.MoveTowards(this.transform.position, _anchorHandTransform.position, _initPropulsionSpeed*Time.deltaTime);
-                else this.transform.position = Vector3.MoveTowards(this.transform.position, _anchorHandTransform.position, -_propulsionSpeed * Time.deltaTime);
-                if(Vector3.Distance(this.transform.position, _anchorHandTransform.position) < _minDistToAnchor) {
+            else if (_propulsionSpeed < -0.1f || _forceRetract) {
+                if (_forceRetract)
+                    this.transform.position = Vector3.MoveTowards(this.transform.position,
+                        _anchorHandTransform.position, _initPropulsionSpeed * Time.deltaTime);
+                else
+                    this.transform.position = Vector3.MoveTowards(this.transform.position,
+                        _anchorHandTransform.position, -_propulsionSpeed * Time.deltaTime);
+                if (Vector3.Distance(this.transform.position, _anchorHandTransform.position) < _minDistToAnchor) {
                     this.transform.position = _anchorHandTransform.position + _initPos;
                     this.transform.rotation = _anchorHandTransform.rotation;
                     _forceRetract = false;
@@ -144,9 +151,9 @@ public class HandPropeller : MonoBehaviour
             }
 
             // Ensure does not enter in Objects
-            if((_collisionSpeedEnter != Vector3.zero) & (!_forceRetract) & (!_attached_object) & (!_attached)) {
+            if ((_collisionSpeedEnter != Vector3.zero) & (!_forceRetract) & (!_attached_object) & (!_attached)) {
                 Vector3 new_displacement = (this.transform.position - _lastPosition);
-                if(Vector3.Dot(_collisionSpeedEnter, new_displacement) > 0) {
+                if (Vector3.Dot(_collisionSpeedEnter, new_displacement) > 0) {
                     this.transform.position = _lastPosition;
                     this.transform.rotation = _lastRotAnchor;
                 }
@@ -165,7 +172,7 @@ public class HandPropeller : MonoBehaviour
     //
     //////////////
     public void PropulseHand(float factor) {
-        if(!_freeze_propulsion) {
+        if (!_freeze_propulsion) {
             UpdatePropulsionSpeed(factor);
             _forceRetract = false;
         }
@@ -176,7 +183,7 @@ public class HandPropeller : MonoBehaviour
     }
 
     public void RetractHand(float factor) {
-        if(factor>0) factor = -factor;
+        if (factor > 0) factor = -factor;
         UpdatePropulsionSpeed(factor);
     }
 
@@ -217,11 +224,16 @@ public class HandPropeller : MonoBehaviour
     }
 
     private void UpdateCylinderPosition() {
-        _tubeCylinder.transform.position = (_anchorHandTransform.transform.position+this.transform.position)/2;
-        _tubeCylinder.transform.LookAt(this.transform.position + Vector3.up*0.01f);
+        Vector3 distanceFromBase =
+            Vector3.up * Vector3.Distance(_anchorHandTransform.transform.position, transform.position) / 2;
+        
+        // Hide cylinder if too small to avoid display issues
+        _tubeCylinder.GetComponent<Renderer>().enabled = distanceFromBase.magnitude > 0.01f;
+
+        _tubeCylinder.transform.position = (_anchorHandTransform.transform.position + this.transform.position) / 2;
+        _tubeCylinder.transform.LookAt(this.transform.position + Vector3.up * 0.01f);
         _tubeCylinder.transform.rotation *= Quaternion.Euler(90.0f, 0.0f, 0.0f);
-        _tubeCylinder.transform.localScale = new Vector3(0.1f,0.01f,0.1f)
-                                           + Vector3.up * Vector3.Distance(_anchorHandTransform.transform.position,this.transform.position) / 2;
+        _tubeCylinder.transform.localScale = new Vector3(0.1f, 0.01f, 0.1f) + distanceFromBase;
     }
 
     ////////////////
@@ -230,7 +242,7 @@ public class HandPropeller : MonoBehaviour
     //
     ////////////////
     public void OnTriggerEnter(Collider other) {
-
+        // Code used for pushing against walls but too impractical so was removed, would need more work
         /*if((other.gameObject.tag != "Plier") & (other.gameObject.tag != "Player") & (!_attached) & (Time.time - _time_pushed > _time_buffer_pushed)) {
             _time_pushed = Time.time;
             float magnitude = _speedLocal.magnitude;
@@ -238,53 +250,56 @@ public class HandPropeller : MonoBehaviour
             _owner.GetComponent<Rigidbody>().velocity = Vector3.Normalize(_speed-_owner.GetComponent<Rigidbody>().velocity) * (-magnitude);
         }*/
 
-        if((other.gameObject.tag != "Plier") & (other.gameObject.tag != "Player")) {
+        if ((!other.gameObject.CompareTag("Plier")) & (!other.gameObject.CompareTag("Player"))) {
             //_freeze_propulsion = true;
             ResetPropulsionSpeed();
             _collisionSpeedEnter = _speed;
         }
 
         // Save collision properties
-        _collisionPosition = this.transform.position;
-        _collisionOrientation = this.transform.rotation;
+        _collisionPosition = transform.position;
+        _collisionOrientation = transform.rotation;
     }
 
     public void OnTriggerStay(Collider other) {
-          // If the collision is with an anchor object AND the player was propelling the hand (TODO: Make Anchor Tag)
-          // => Attach the plier to the object
-          if((other.gameObject.tag != "Plier") & _grabbing & (other.gameObject.tag != "Player") & (!_attached) &(!_attached_object)& (Time.time - _time_attached > _time_buffer_attach)) {
-              _time_attached = Time.time;
-              bool isHeavy;
+        // If the collision is with an anchor object AND the player was propelling the hand (TODO: Make Anchor Tag)
+        // => Attach the plier to the object
+        if ((!other.gameObject.CompareTag("Plier")) & _grabbing & (!other.gameObject.CompareTag("Player")) & (!_attached) &
+            (!_attached_object) & (Time.time - _time_attached > _time_buffer_attach)) {
+            _time_attached = Time.time;
+            bool isHeavy;
 
-              //Grab light object
-              if(other.GetComponent<Grabbable>() != null) {
-                  _attached = false;
-                  _attached_object = true;
-                  isHeavy = false;
-                  _grabbedObject = other.gameObject.GetComponent<Grabbable>();
-                  _grabbedObject.SetKinematic(true);
-                  _grabbedObject.OnGrab(this.gameObject);
-                  _freeze_propulsion = false;
+            //Grab light object
+            if (other.GetComponent<Grabbable>() != null) {
+                _attached = false;
+                _attached_object = true;
+                isHeavy = false;
+                _grabbedObject = other.gameObject.GetComponent<Grabbable>();
+                _grabbedObject.SetKinematic(true);
+                _grabbedObject.OnGrab(this.gameObject);
+                _freeze_propulsion = false;
 
-                  if(other.attachedRigidbody != null ) {
-                      // Compute center of mass between plier(with object mass) and player with body mass
-                      float total_mass = _ownerPM._playerMass + other.attachedRigidbody.mass;
-                      Vector3 center_of_mass = _owner.transform.position*_ownerPM._playerMass/total_mass
-                                             + this.transform.position*other.attachedRigidbody.mass/total_mass;
-                      _ownerPM.OnAttachedPlierObject(center_of_mass, (int)_anchorSide, isHeavy);
-                  } else {
-                      _ownerPM.OnAttachedPlierObject(this.transform.position, (int)_anchorSide, isHeavy);
-                  }
-              } else {
-                  //Attached to heavy object
-                  ResetPropulsionSpeed();
-                  _attached = true;
-                  _attached_object = false;
-                  isHeavy = true;
+                if (other.attachedRigidbody != null) {
+                    // Compute center of mass between plier(with object mass) and player with body mass
+                    float total_mass = _ownerPM._playerMass + other.attachedRigidbody.mass;
+                    Vector3 center_of_mass = _owner.transform.position * _ownerPM._playerMass / total_mass
+                                             + this.transform.position * other.attachedRigidbody.mass / total_mass;
+                    _ownerPM.OnAttachedPlierObject(center_of_mass, (int) _anchorSide, isHeavy);
+                }
+                else {
+                    _ownerPM.OnAttachedPlierObject(this.transform.position, (int) _anchorSide, isHeavy);
+                }
+            }
+            else {
+                //Attached to heavy object
+                ResetPropulsionSpeed();
+                _attached = true;
+                _attached_object = false;
+                isHeavy = true;
 
-                  //Attract Player in direction
-                  _ownerPM.OnAttachedPlierObject(this.transform.position, (int)_anchorSide, isHeavy);
-              }
+                //Attract Player in direction
+                _ownerPM.OnAttachedPlierObject(this.transform.position, (int) _anchorSide, isHeavy);
+            }
         }
     }
 
@@ -318,13 +333,13 @@ public class HandPropeller : MonoBehaviour
     }
 
     public void OnGrabFinish(Grabbable grabbed) {
-      if(grabbed != null) {
-          grabbed.SetKinematic(false);
-          grabbed.OnRelease();
-          grabbed.GetComponent<Rigidbody>().velocity = _speed;
-          grabbed = null;
-
-      }
+        if (grabbed != null) {
+            grabbed.SetKinematic(false);
+            grabbed.OnRelease();
+            Vector3 speed = _speed;
+            Task.Delay(30).ContinueWith(t => grabbed.GetComponent<Rigidbody>().velocity = speed);
+            grabbed.GetComponent<Rigidbody>().velocity = speed;
+        }
     }
     /////////////
     //
@@ -340,5 +355,4 @@ public class HandPropeller : MonoBehaviour
     private void SetUnGrabbingMesh() {
         this.GetComponent<MeshFilter>().mesh = _ungrabbingMesh;
     }
-
 }
