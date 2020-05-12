@@ -8875,6 +8875,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: caafc844cc7459643852bca4058e4bae, type: 2}
+--- !u!114 &779470011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779470007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df8e1d778abf442e4bec449c360e9e1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeTime: 2
+  fadeColor: {r: 0.01, g: 0.01, b: 0.01, a: 1}
+  fadeOnStart: 1
+  renderQueue: 5000
 --- !u!1 &782463386
 GameObject:
   m_ObjectHideFlags: 0
@@ -10730,6 +10746,16 @@ PrefabInstance:
       propertyPath: accessCard
       value: 
       objectReference: {fileID: 1265585479}
+    - target: {fileID: 972115065906884912, guid: da637e3bcb6d630498bd3624cf00756d,
+        type: 3}
+      propertyPath: fader
+      value: 
+      objectReference: {fileID: 779470011}
+    - target: {fileID: 972115065906884912, guid: da637e3bcb6d630498bd3624cf00756d,
+        type: 3}
+      propertyPath: faderAnchor
+      value: 
+      objectReference: {fileID: 779470007}
     - target: {fileID: 1673258114719951650, guid: da637e3bcb6d630498bd3624cf00756d,
         type: 3}
       propertyPath: m_LODs.Array.data[1].screenRelativeHeight
