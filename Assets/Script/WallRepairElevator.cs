@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WallRepairElevator : MonoBehaviour {
+    /**
+     * When all the SwingOnlyButtons are pushed, trigger the elevator to go down
+     */
+    
     public GameObject[] swingables;
     public ElevatorDownKinematic elevator;
     public PlayAudio clipToPlay;

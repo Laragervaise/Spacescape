@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 
 public class ElevatorDownKinematic : MonoBehaviour {
+    /*
+     * Modified the code from the asset pack DeepSpace to meet our need
+     * Can call the elevator down only, and set it kinematic to avoid pushing the player
+     * Set it back to not kinematic afterwards.
+     */
+    
+    
     [Header("Current mesh position, e.g. 1,2,3,4.. floor (from 1)")]
     public int StartFloor;
 

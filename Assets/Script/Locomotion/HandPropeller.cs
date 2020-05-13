@@ -35,6 +35,7 @@ public class HandPropeller : MonoBehaviour {
     public float _maxPlierDist = 4.0f;
     public float _minDistToAnchor = 0.3f;
     public float _speedFactor = 0.2f;
+    public float _collisionFactor = 0;
 
     //Private instances
     private PropulsionManager _ownerPM;
@@ -165,8 +166,10 @@ public class HandPropeller : MonoBehaviour {
             // Ensure does not enter in Objects: To be improved
             if ((_collisionSpeedEnter != Vector3.zero) & (!_forceRetract) & (!_attached)) {
                 Vector3 new_speed = Vector3.Normalize((this.transform.position - _lastPosition)/2);
-                this.transform.position = _lastPosition;
-                this.transform.rotation = _lastRotPlier;
+                if (Vector3.Dot(_collisionSpeedEnter, new_speed) >= _collisionFactor) {
+                    this.transform.position = _lastPosition;
+                    this.transform.rotation = _lastRotPlier;
+                }
             }
         }
 

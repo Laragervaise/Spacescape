@@ -2,6 +2,16 @@
 using UnityEngine;
 
 public class SwingOnlyButton : MonoBehaviour {
+    /**
+     * Make this button/object only swingable by a specific object (bat)
+     * When it reaches the position of "backButton", is sticks there and tell its
+     * parentTrigger that he was triggered.
+     *
+     * Only the speed of the bat at the moment of the impact matters, it is transmitted to
+     * the button and the button loses his collider for a short while. The button must be
+     * linked to the "backButton" by a joint spring!
+     */
+    
     public GameObject bat;
     public GameObject backButton;
     public GameObject cylinder;
@@ -14,6 +24,10 @@ public class SwingOnlyButton : MonoBehaviour {
         parentTrigger = parent;
     }
 
+    /**
+     * Get the speed of the bat, as it is held by the player, computing its speed must be done
+     * manually. Update the cylinder that visually links this button to "backButton"'s position
+     */
     void FixedUpdate() {
         Vector3 position = bat.transform.position;
         _speed = (position - _lastPosition) / Time.deltaTime;
@@ -30,6 +44,9 @@ public class SwingOnlyButton : MonoBehaviour {
         Task.Delay(500).ContinueWith(t => GetComponent<BoxCollider>().isTrigger = false);
     }
 
+    /**
+     * Check for collision with "backButton" and apply the various effects
+     */
     public void OnTriggerEnter(Collider other) {
         if (!doneTrigger && other.gameObject == backButton) {
             transform.position = backButton.transform.position;
@@ -41,6 +58,9 @@ public class SwingOnlyButton : MonoBehaviour {
         }
     }
 
+    /**
+     * Update the visual cylinders linking the button to "backButton"'s position
+     */
     private void UpdateCylinderPosition() {
         var position = backButton.transform.position;
         cylinder.transform.position = (position + transform.position) / 2;

@@ -12487,6 +12487,11 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.y
       value: 0.5000001
       objectReference: {fileID: 0}
+    - target: {fileID: 4879016524744094289, guid: b13e012451b912c48a99049d9e5e9d9a,
+        type: 3}
+      propertyPath: m_Spring
+      value: 400
+      objectReference: {fileID: 0}
     - target: {fileID: 4879016524744094292, guid: b13e012451b912c48a99049d9e5e9d9a,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -24205,6 +24210,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ConnectedAnchor.y
       value: 0.49999997
+      objectReference: {fileID: 0}
+    - target: {fileID: 4879016524744094289, guid: b13e012451b912c48a99049d9e5e9d9a,
+        type: 3}
+      propertyPath: m_Spring
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 4879016524744094292, guid: b13e012451b912c48a99049d9e5e9d9a,
         type: 3}
