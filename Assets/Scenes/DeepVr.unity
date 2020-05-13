@@ -1231,12 +1231,12 @@ GameObject:
   - component: {fileID: 76934891}
   - component: {fileID: 76934890}
   m_Layer: 0
-  m_Name: Directional Light (1)
+  m_Name: point light 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &76934890
 Light:
   m_ObjectHideFlags: 0
@@ -1288,7 +1288,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -1305,12 +1305,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 76934889}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.88, y: -1.16, z: -0.97}
+  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalPosition: {x: -0.006044686, y: 3.7474294, z: 1.7504696}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1204482315}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 44
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &78040148
 PrefabInstance:
@@ -2282,12 +2282,12 @@ GameObject:
   - component: {fileID: 147772602}
   - component: {fileID: 147772603}
   m_Layer: 0
-  m_Name: Point light (9)
+  m_Name: Point light 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &147772602
 Transform:
   m_ObjectHideFlags: 0
@@ -2353,7 +2353,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 2
@@ -8752,6 +8752,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 3763126481478056960, guid: 126d619cf4daa52469682f85c1378b4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3763527891495029476, guid: 126d619cf4daa52469682f85c1378b4a,
         type: 3}
       propertyPath: m_Layer
@@ -9266,6 +9271,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8590085628554181399, guid: 126d619cf4daa52469682f85c1378b4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
@@ -11711,7 +11721,12 @@ PrefabInstance:
     - target: {fileID: 2757726309234100600, guid: da637e3bcb6d630498bd3624cf00756d,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2757726309234100600, guid: da637e3bcb6d630498bd3624cf00756d,
+        type: 3}
+      propertyPath: m_Name
+      value: point light 7
       objectReference: {fileID: 0}
     - target: {fileID: 3975188853495504921, guid: da637e3bcb6d630498bd3624cf00756d,
         type: 3}
@@ -11927,6 +11942,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Intensity
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7030437268268046897, guid: da637e3bcb6d630498bd3624cf00756d,
+        type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7043312806359220653, guid: da637e3bcb6d630498bd3624cf00756d,
         type: 3}
@@ -14440,37 +14460,6 @@ Transform:
   m_Father: {fileID: 1426105036}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1204482314
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1204482315}
-  m_Layer: 0
-  m_Name: lights
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1204482315
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1204482314}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3.75, z: 3.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 76934891}
-  m_Father: {fileID: 0}
-  m_RootOrder: 44
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1207512061
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14596,12 +14585,12 @@ GameObject:
   - component: {fileID: 1223961098}
   - component: {fileID: 1223961097}
   m_Layer: 0
-  m_Name: Directional Light (6)
+  m_Name: point light 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &1223961097
 Light:
   m_ObjectHideFlags: 0
@@ -14653,7 +14642,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -14942,12 +14931,12 @@ GameObject:
   - component: {fileID: 1248218033}
   - component: {fileID: 1248218032}
   m_Layer: 0
-  m_Name: Directional Light (1)
+  m_Name: point light 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &1248218032
 Light:
   m_ObjectHideFlags: 0
@@ -14999,7 +14988,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -17434,12 +17423,12 @@ GameObject:
   - component: {fileID: 1434880748}
   - component: {fileID: 1434880747}
   m_Layer: 0
-  m_Name: Directional Light (4)
+  m_Name: point light 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &1434880747
 Light:
   m_ObjectHideFlags: 0
@@ -17491,7 +17480,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -17556,12 +17545,12 @@ GameObject:
   - component: {fileID: 1445836249}
   - component: {fileID: 1445836248}
   m_Layer: 0
-  m_Name: Directional Light (5)
+  m_Name: point light 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &1445836248
 Light:
   m_ObjectHideFlags: 0
@@ -17613,7 +17602,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -20164,12 +20153,12 @@ GameObject:
   - component: {fileID: 1715854728}
   - component: {fileID: 1715854727}
   m_Layer: 0
-  m_Name: Directional Light (3)
+  m_Name: point light 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &1715854727
 Light:
   m_ObjectHideFlags: 0
@@ -20221,7 +20210,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -22057,6 +22046,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4518665549472693895, guid: e596aa679c9a2a04fb360974fa52e85b,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6582963589376950680, guid: e596aa679c9a2a04fb360974fa52e85b,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -23848,12 +23842,12 @@ GameObject:
   - component: {fileID: 2054119839}
   - component: {fileID: 2054119838}
   m_Layer: 0
-  m_Name: Point light (8)
+  m_Name: point light 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &2054119838
 Light:
   m_ObjectHideFlags: 0
@@ -23905,7 +23899,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 2
@@ -24594,6 +24588,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1292377508}
     m_Modifications:
+    - target: {fileID: 2744748880648950288, guid: 02e5172e88638f84bbc3181b52179f62,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4898133473954557193, guid: 02e5172e88638f84bbc3181b52179f62,
         type: 3}
       propertyPath: m_LocalPosition.x
