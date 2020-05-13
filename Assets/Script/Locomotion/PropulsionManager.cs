@@ -76,6 +76,12 @@ public class PropulsionManager : MonoBehaviour {
 
     void FixedUpdate()
     {
+        // Retract hands at the beginning as they are not always by default
+        if((Time.frameCount == 100)) {
+            OnCancelInput(0);
+            OnCancelInput(1);
+        }
+        
         /* For each plier, we have the following Behaviour:
             - If the player presses Extention input:
                 If this hand is not already attached:
