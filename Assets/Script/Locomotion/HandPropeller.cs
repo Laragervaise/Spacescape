@@ -161,9 +161,9 @@ public class HandPropeller : MonoBehaviour {
             }
 
             // Ensure does not enter in Objects: To be improved
-            if ((_collisionSpeedEnter != Vector3.zero) & (!_forceRetract) & (!_attached_object) & (!_attached)) {
-                Vector3 new_displacement = Vector3.Normalize((this.transform.position - _lastPosition)/2);
-                if (Vector3.Dot(_collisionSpeedEnter, new_displacement) >= _collisionFactor) {
+            if ((_collisionSpeedEnter != Vector3.zero) & (!_forceRetract) & (!_attached) & (_collisionSpeedEnter!=Vector3.zero)) {
+                Vector3 new_speed = Vector3.Normalize((this.transform.position - _lastPosition)/2);
+                if (Vector3.Dot(_collisionSpeedEnter, new_speed) >= _collisionFactor) {
                     this.transform.position = _lastPosition;
                     this.transform.rotation = _lastRotAnchor;
                 }
@@ -259,7 +259,7 @@ public class HandPropeller : MonoBehaviour {
             magnitude = Mathf.Min(magnitude*_speedFactor, _maxSpeed);
             _owner.GetComponent<Rigidbody>().velocity = Vector3.Normalize(_speed-_owner.GetComponent<Rigidbody>().velocity) * (-magnitude);
         }*/
-
+        _collisionSpeedEnter = Vector3.zero;
         if ((!other.gameObject.CompareTag("Plier")) & (!other.gameObject.CompareTag("Player")) & (other.GetComponent<Grabbable>() == null)) {
             //_freeze_propulsion = true;
             ResetPropulsionSpeed();
