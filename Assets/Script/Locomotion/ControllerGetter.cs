@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class ControllerGetter : MonoBehaviour
 {
-    // This class is a workaround as the device does not handle properly GetDown and GetUp inputs.
+    /*
+        CONTROLLER GETTER
+
+        Provides an interface to retrieve inputs from the attached controller and set vibrations on attach.
+        Functions are called by propulsionManager at each fixedUpdate
+
+        Attach to  GameObject: LeftController, Right Controller
+    */
 
     //Defines types for this class
     public enum AnchorSideType : int {
@@ -12,18 +19,19 @@ public class ControllerGetter : MonoBehaviour
         RightHand = 1
     };
 
+    //Public instances
+    public GameObject _plier;
+    public bool controllers = true;     //Allows to switch between controllers or keyboard for debugging
+    public AnchorSideType _anchorSide;
+
     //private instances
     private bool _wasExtending = false;
     private bool _wasRetracting = false;
     private bool _wasCancelling = false;
     private bool _wasGrabbing = false;
-
-    public GameObject _plier;
     private HandPropeller _plierPropeller;
 
-    //Allows to switch between controllers or keyboard
-    public bool controllers = true;
-    public AnchorSideType _anchorSide;
+
 
     void Start() {
         _plierPropeller = _plier.GetComponent<HandPropeller>();
@@ -75,7 +83,6 @@ public class ControllerGetter : MonoBehaviour
           else                                       cancel_input = Input.GetKey("i");
       }
 
-      //Returns true the first frame it is being pressed
       return cancel_input;
     }
 

@@ -5,6 +5,17 @@ using UnityEngine;
 
 public class PropulsionManager : MonoBehaviour {
 
+    /*
+        PROPULSION MANAGER
+
+        Provides the interface for the robot's body movements.
+        It collects inputs from both controllers, triggers action for the pliers accordingly, and provide any reaction to the robot's Body
+
+
+        Attach to GameObject : Player
+    */
+
+
     //Public instances
     public float _playerMass=20.0f;
     public float _bodySize = 1.0f;
@@ -35,7 +46,6 @@ public class PropulsionManager : MonoBehaviour {
     private bool[] _forceRetract;      // Force retract the pliers
     private Vector3[] _handAttachedHeavyDirection;  //Direction of plier attachement point
     private Vector3 _goalDirection;                 //Camera Goal direction
-    private Vector3 _lastPos;                       //Last position of the camera: used to compute _moving
     private Rigidbody _playerRigidBody;
     private Collider _playerCollider;
 
@@ -47,7 +57,6 @@ public class PropulsionManager : MonoBehaviour {
         _handAttachedHeavy = new bool[2]{false, false};
         _handAttachedHeavyDirection = new Vector3[2];
         _forceRetract = new bool[2]{false, false};
-        _lastPos = this.transform.position;
         _leftHand = GameObject.Find("LeftPlier");
         _rightHand = GameObject.Find("RightPlier");
         _playerRigidBody = this.GetComponent<Rigidbody>();
@@ -59,7 +68,7 @@ public class PropulsionManager : MonoBehaviour {
                                                _rightHand.GetComponent<HandPropeller>()};
 
         _playerRigidBody.constraints = RigidbodyConstraints.FreezeRotation;
-        
+
         // Retract hands at the beginning as they are not always by default
         OnCancelInput(0);
         OnCancelInput(1);
@@ -71,30 +80,19 @@ public class PropulsionManager : MonoBehaviour {
             - If the player presses Extention input:
                 If this hand is not already attached:
                   Start Propelling the plier.
-            - If the player stops pressing Extention input:
-                If this hand is not already attached:
-                  Stop propelling the plier
 
             - If the player starts pressing retraction input:
-                If the player is not already being dragged by any other hand (potentially remove this and apply to dragginghand only):
-                  * If the hand is attached to an heavy object:
-                      Attract the player to the heavy Object: retract toward the object
-                  * If the hand is not attached to anything:
-                      Retract the plier: retract toward the player
-                  * TODO: If the hand is attach to a light Object:
-                      Retract both the player and the object toward the center of mass of both objects. TODO: Do we freeze the plier during this action ?
-            - If the player stops pressing retraction input:
-                  * If it is attached to any object:
-                      Stops dragging
-                  * If the hand is not attached:
-                      We only stop the retraction toward the object if there is no "force retract" of the plier toward the player (cancel operation)
+                If the player is attached to a heavy object:
+                  Attracts the player to the heavy Object: retract toward the object
+                Else (attached to a light object or not attached):
+                  Retract the plier: retract toward the player
 
             - If player hits the cancel Button:
                 Force retract the plier and overwrites any other action
 
-            - TODO: If the player presses the grab button:
+            - If the player presses the grab button:
                 If the hand is colliding with an object
-                    Attach the plier to the object and get the mass of this object
+                    Attach the plier to the object
         */
         // LeftHand
         if(_leftControllerGetter.getCancel()) {
@@ -161,8 +159,6 @@ public class PropulsionManager : MonoBehaviour {
               OnGrabStop(1);
             }
         }
-        // Update position
-        //_lastPos = this.transform.position;
 
         //Movement Update
         if(_beingDragged) {
@@ -170,37 +166,39 @@ public class PropulsionManager : MonoBehaviour {
                 OnDragFinish(_draggingHand);
             }
         }
+
+        //Zero Velocity when too small
         if (_playerRigidBody.velocity.magnitude < _minPlayerSpeed) _playerRigidBody.velocity = Vector3.zero;
     }
 
-    public Vector3 GetTranslation() {
-         Vector3 trans = this.transform.position - _lastPos;
-         _lastPos = this.transform.position;
-         return trans;
-    }
-
+    // If cancel: Distach and Force Retract the corresponding plier
     private void OnCancelInput(int handType) {
         _handAttachedHeavy[handType] = false;
         _forceRetract[handType] = true;
         _handPropellers[handType].ForceRetractHand();
     }
 
+    //  If extend: Propulse hand with speed according to joystick pressure
     private void OnExtension(int handType, float speed) {
         _handPropellers[handType].PropulseHand(speed);
     }
 
+    // If stop extending: Set speed of pliers to 0
     private void OnExtensionStop(int handType) {
         _handPropellers[handType].StopPropulseHand();
     }
 
+    // If retracting: *retract hand with speed according to joystick
     private void OnRetraction(int handType, float speed) {
         _handPropellers[handType].RetractHand(speed);
     }
 
+    // If stop retracting: Set speed of pliers to 0
     private void OnRetractionStop(int handType) {
         _handPropellers[handType].StopRetractHand();
     }
 
+    // If grabbing: Update state of plier
     private void OnGrabStart(int handType) {
         _handPropellers[handType].StartGrabbingHand();
     }
@@ -212,7 +210,7 @@ public class PropulsionManager : MonoBehaviour {
 
     // If the player decided to drag toward an object
     private void OnDragStart(Vector3 goalDirection,int handType, float speed) {
-        // Apply Force toward goal Direction
+        // Apply velocity toward goal Direction
         if(!_beingDragged) {
             _beingDragged = true;
             _goalDirection = goalDirection;
@@ -229,6 +227,7 @@ public class PropulsionManager : MonoBehaviour {
         _playerRigidBody.velocity = Vector3.Normalize(forceDirection)*speed;
     }
 
+    // On drag stop: Set speed to 0 only if it is attached to a heavy object
     private void OnDragStop(int handType) {
         //Make velocity null
         if(_handAttachedHeavy[handType]) {
@@ -237,13 +236,14 @@ public class PropulsionManager : MonoBehaviour {
         _beingDragged = false;
     }
 
+    // On Drag finish: Distach the hand
     private void OnDragFinish(int handType) {
           _handAttachedHeavy[handType] = false;
           endedForceRetraction(handType);
           _beingDragged = false;
     }
 
-    // If a plier has attached a too heavy object to move
+    // Called from OnCollisionEnter of the pliers, update goal direction and starts vibration
     public void OnAttachedPlierObject(Vector3 goalDirection,int handType, bool heavy) {
         _playerRigidBody.velocity = Vector3.zero;
         if(handType == 0) {
@@ -264,7 +264,7 @@ public class PropulsionManager : MonoBehaviour {
         _handAttachedHeavy[handType] = false;
     }
 
-    //TODO: ISSUE HERE DOES NOT ENTER IF KINEMATIC MODE IS ON. BUT IF IT IS ON: PLIERS CAN PUSH THE PLAYER
+    // Slow bouncing effect when colliding with a wall.
     public void OnCollisionEnter(Collision other) {
         if(other.transform.tag  != "Plier") {
             Vector3 normal = other.GetContact(0).normal;

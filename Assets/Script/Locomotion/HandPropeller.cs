@@ -5,24 +5,33 @@ using UnityEngine;
 
 
 public class HandPropeller : MonoBehaviour {
+    /*
+        HAND PROPELLER
+
+        Handles mechanics for the each pliers.
+        Receives input from the propulsion Manager
+
+       Attach to GameObject : Right Plier, Left Plier
+    */
+
     // Public variables
     public enum AnchorSideType : int {
         LeftHand = 0,
         RightHand = 1
     };
 
-    public float _initialOffset = 0.2f;
-    public GameObject _owner;
+    public float _initialOffset = 0.2f; // Offset with respect to handAnchor
+    public GameObject _owner;           // Robot'sbody
     public AnchorSideType _anchorSide;
-    public GameObject _tubeCylinderPrefab;
+    public GameObject _tubeCylinderPrefab;  //Cylinder linking hand to plier
     public GameObject _handController;
     public Mesh _grabbingMesh;
     public Mesh _ungrabbingMesh;
 
     public float _initPropulsionSpeed = 3.0f;
     public float _maxSpeed = 3.0f;
-    public float _time_buffer_attach = 0.5f;
-    public float _time_buffer_pushed = 1.0f;
+    public float _time_buffer_attach = 0.5f;    //Avoid attaching constantly on grabbing
+    public float _time_buffer_pushed = 1.0f;    //Avoid constantly ^pushing against a wall
     public float _maxPlierDist = 4.0f;
     public float _minDistToAnchor = 0.3f;
     public float _speedFactor = 0.2f;
@@ -45,7 +54,7 @@ public class HandPropeller : MonoBehaviour {
     private bool _attached = false;
     private bool _attached_object = false;
     private bool _grabbing = false;
-    private bool _freeze_propulsion = false;
+    private bool _freeze_propulsion = false; // Not used as was too buggy. Would require some rework.
     private float _time_attached;
     private float _time_pushed;
 
@@ -95,7 +104,7 @@ public class HandPropeller : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        //Plier positions
+        //Save previous Plier positions
         Vector3 position = transform.position;
         Vector3 positionLocal = transform.localPosition;
         _speed = (position - _lastPosition) / Time.deltaTime;
@@ -114,7 +123,8 @@ public class HandPropeller : MonoBehaviour {
             // Update pliers position with respect to handAnchor
             Quaternion angle = _anchorHandTransform.rotation * Quaternion.Inverse(_lastRotAnchor);
             if (angle != new Quaternion(0.0f, 0.0f, 0.0f, 1.0f)) {
-                //Not completely working ... ?
+
+                //Move plier position around hand Anchor according to rotation of the handAnchor
                 this.transform.RotateAround(_anchorHandTransform.position, Vector3.up, angle.eulerAngles.y);
                 this.transform.RotateAround(_anchorHandTransform.position, Vector3.right, angle.eulerAngles.x);
                 this.transform.RotateAround(_anchorHandTransform.position, Vector3.forward, angle.eulerAngles.z);
@@ -134,10 +144,12 @@ public class HandPropeller : MonoBehaviour {
             else if (_propulsionSpeed < -0.1f || _forceRetract) {
                 if (_forceRetract)
                     this.transform.position = Vector3.MoveTowards(this.transform.position,
-                        _anchorHandTransform.position, _initPropulsionSpeed * Time.deltaTime);
+                        _anchorHandTransform.position, _initPropulsionSpeed * Time.deltaTime); //Max speed
                 else
                     this.transform.position = Vector3.MoveTowards(this.transform.position,
-                        _anchorHandTransform.position, -_propulsionSpeed * Time.deltaTime);
+                        _anchorHandTransform.position, -_propulsionSpeed * Time.deltaTime);   //Speed according to input
+
+                // Reset Position if close to handAnchor
                 if (Vector3.Distance(this.transform.position, _anchorHandTransform.position) < _minDistToAnchor) {
                     this.transform.position = _anchorHandTransform.position + _initPos;
                     this.transform.rotation = _anchorHandTransform.rotation;
@@ -147,7 +159,7 @@ public class HandPropeller : MonoBehaviour {
                 }
             }
 
-            // Ensure does not enter in Objects
+            // Ensure does not enter in Objects: To be improved
             if ((_collisionSpeedEnter != Vector3.zero) & (!_forceRetract) & (!_attached_object) & (!_attached)) {
                 Vector3 new_displacement = (this.transform.position - _lastPosition);
                 if (Vector3.Dot(_collisionSpeedEnter, new_displacement) > 0) {
@@ -157,7 +169,7 @@ public class HandPropeller : MonoBehaviour {
             }
         }
 
-        //Update cylinder position if not attached
+        //Update cylinder position
         UpdateCylinderPosition();
         _lastPostionAnchor = _anchorHandTransform.position;
         _lastRotAnchor = _anchorHandTransform.rotation;
@@ -223,7 +235,7 @@ public class HandPropeller : MonoBehaviour {
     private void UpdateCylinderPosition() {
         Vector3 distanceFromBase =
             Vector3.up * Vector3.Distance(_anchorHandTransform.transform.position, transform.position) / 2;
-        
+
         // Hide cylinder if too small to avoid display issues
         _tubeCylinder.GetComponent<Renderer>().enabled = distanceFromBase.magnitude > 0.01f;
 
@@ -259,7 +271,6 @@ public class HandPropeller : MonoBehaviour {
     }
 
     public void OnTriggerStay(Collider other) {
-        // If the collision is with an anchor object AND the player was propelling the hand (TODO: Make Anchor Tag)
         // => Attach the plier to the object
         if ((!other.gameObject.CompareTag("Plier")) & _grabbing & (!other.gameObject.CompareTag("Player")) & (!_attached) &
             (!_attached_object) & (Time.time - _time_attached > _time_buffer_attach)) {
@@ -303,10 +314,6 @@ public class HandPropeller : MonoBehaviour {
     public void OnTriggerExit(Collider other) {
         _freeze_propulsion = false;
         _collisionSpeedEnter = Vector3.zero;
-        /*
-        if((other.attachedRigidbody != null) & (other.GetComponent<Grabbable>() != null)) {
-            OnGrabFinish(other.GetComponent<Grabbable>());
-        }*/
     }
 
 
@@ -317,7 +324,6 @@ public class HandPropeller : MonoBehaviour {
     /////////////
 
     // Reset values after finishing dragging player
-    //TODO : Reattach to hand anchor if detached
     public void OnDragFinished() {
         StopRetractHand();
         _attached = false;
@@ -329,6 +335,7 @@ public class HandPropeller : MonoBehaviour {
         _grabbedObject = null;
     }
 
+    // Reset obejct state when releasing it
     public void OnGrabFinish(Grabbable grabbed) {
         if (grabbed != null) {
             grabbed.SetKinematic(false);
@@ -340,7 +347,7 @@ public class HandPropeller : MonoBehaviour {
     }
     /////////////
     //
-    // Mesh Change
+    // Mesh Change On Grab
     //
     /////////////
 
