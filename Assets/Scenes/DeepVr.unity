@@ -1450,7 +1450,7 @@ GameObject:
   - component: {fileID: 84552498}
   - component: {fileID: 84552497}
   - component: {fileID: 84552496}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BigRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9667,7 +9667,7 @@ GameObject:
   - component: {fileID: 794960206}
   - component: {fileID: 794960205}
   - component: {fileID: 794960204}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: StorageRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10174,7 +10174,7 @@ GameObject:
   - component: {fileID: 829691723}
   - component: {fileID: 829691722}
   - component: {fileID: 829691721}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ControlRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18028,7 +18028,7 @@ GameObject:
   - component: {fileID: 1514579359}
   - component: {fileID: 1514579358}
   - component: {fileID: 1514579357}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ElevatorSee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21310,7 +21310,7 @@ GameObject:
   - component: {fileID: 1831396315}
   - component: {fileID: 1831396317}
   - component: {fileID: 1831396316}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ElevatorRepaired
   m_TagString: Untagged
   m_Icon: {fileID: 0}
