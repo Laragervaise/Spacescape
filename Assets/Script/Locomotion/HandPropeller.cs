@@ -35,7 +35,7 @@ public class HandPropeller : MonoBehaviour {
     public float _maxPlierDist = 4.0f;
     public float _minDistToAnchor = 0.3f;
     public float _speedFactor = 0.2f;
-    public double _collisionFactor = -0.7;
+    public double _collisionFactor = -0.9;
 
     //Private instances
     private PropulsionManager _ownerPM;
@@ -67,6 +67,7 @@ public class HandPropeller : MonoBehaviour {
     private Vector3 _speedLocal;
     private Vector3 _lastPostionAnchor;
     private Quaternion _lastRotAnchor;
+    private Quaternion _lastRotPlier;
     private Vector3 _collisionSpeedEnter = Vector3.zero;
 
     void Start() {
@@ -96,6 +97,7 @@ public class HandPropeller : MonoBehaviour {
 
         _lastPosition = transform.position;
         _lastPositionLocal = transform.localPosition;
+        _lastRotPlier = this.transform.rotation;
         _speed = Vector3.zero;
         _time_attached = Time.time;
         UpdateCylinderPosition();
@@ -112,6 +114,7 @@ public class HandPropeller : MonoBehaviour {
         _speedLocal = (positionLocal - _lastPositionLocal) / Time.deltaTime;
         _lastPosition = position;
         _lastPositionLocal = positionLocal;
+        _lastRotPlier = this.transform.rotation;
         // If the plier is attached : Freeze its position
         if (_attached) {
             this.transform.position = _collisionPosition;
@@ -165,7 +168,7 @@ public class HandPropeller : MonoBehaviour {
                 Vector3 new_speed = Vector3.Normalize((this.transform.position - _lastPosition)/2);
                 if (Vector3.Dot(_collisionSpeedEnter, new_speed) >= _collisionFactor) {
                     this.transform.position = _lastPosition;
-                    this.transform.rotation = _lastRotAnchor;
+                    this.transform.rotation = _lastRotPlier;
                 }
             }
         }
