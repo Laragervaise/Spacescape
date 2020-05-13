@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33403261262359814}
   - component: {fileID: 23618896042917104}
   - component: {fileID: 64152305975564036}
+  - component: {fileID: 3573566652386724118}
   m_Layer: 0
   m_Name: way construct floor tile side
   m_TagString: Untagged
@@ -95,3 +96,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: af871cbeddff636429e461c498fff121, type: 3}
+--- !u!65 &3573566652386724118
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1122530082431072}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.0000043, y: 0.30005336, z: 4.0000024}
+  m_Center: {x: -0.00000071525574, y: -0.05, z: 0.0000011920929}

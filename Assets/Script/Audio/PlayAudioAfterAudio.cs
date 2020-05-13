@@ -6,6 +6,6 @@ public class PlayAudioAfterAudio : PlayAudio {
     public PlayAudio other;
 
     public override void DoAfterClip() {
-        StartCoroutine(other.PlayClip());
+        StartCoroutine(other.PlayClipAfterDelay(2.5f));
     }
 }

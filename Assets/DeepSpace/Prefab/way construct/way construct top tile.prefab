@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33209482890592386}
   - component: {fileID: 23359058522183716}
   - component: {fileID: 501083012545778064}
+  - component: {fileID: 7028669348570402620}
   m_Layer: 0
   m_Name: way construct top tile
   m_TagString: Untagged
@@ -94,3 +95,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 1d3704b61c023c24c9f1deba77d23aed, type: 3}
+--- !u!65 &7028669348570402620
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1185690732698508}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4, y: 0.70005393, z: 4.000007}
+  m_Center: {x: -0.0000044107437, y: 4.25, z: 0.0000021457672}
