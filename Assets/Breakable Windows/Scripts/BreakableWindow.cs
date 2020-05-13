@@ -19,10 +19,10 @@ public class BreakableWindow : MonoBehaviour {
     public bool addTorques = true;
     public bool hideSplintersInHierarchy = true;
     public bool useCollision = true;
+
+    // the minimum velocity of the object colliding to trigger the destruction of the window
     [Range(1, 10)]
     public int threshold = 8;
-    //[Tooltip("Use 0 for breaking immediately if a collision is detected.")]
-    //public float health = 0;
 
     [Space]
     [Space]
@@ -235,7 +235,7 @@ public class BreakableWindow : MonoBehaviour {
         return splinters.ToArray();
     }
 
-    // break the window if the object is thrown hard enough
+    // break the window if the object is thrown hard enough and is the hammer
     void OnCollisionEnter(Collision col)
     {
         if (useCollision == true && col.relativeVelocity.magnitude >= threshold && col.gameObject.CompareTag("bat"))
