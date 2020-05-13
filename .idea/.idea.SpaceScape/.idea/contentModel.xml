@@ -960,6 +960,13 @@
         </e>
         <e p="Script" t="Include">
           <e p="ActionOnCollision.cs" t="Include" />
+          <e p="Audio" t="Include">
+            <e p="PlayAudio.cs" t="Include" />
+            <e p="PlayAudioAfterAudio.cs" t="Include" />
+            <e p="PlayAudioOnTrigger.cs" t="Include" />
+            <e p="PlayAudioOpenDoor.cs" t="Include" />
+            <e p="PlayAudioSImple.cs" t="Include" />
+          </e>
           <e p="ElevatorDownKinematic.cs" t="Include" />
           <e p="GameEnd.cs" t="Include" />
           <e p="GrabbingAnchor.cs" t="Include" />
@@ -972,7 +979,6 @@
           </e>
           <e p="MoveAlongGrabbables.cs" t="Include" />
           <e p="OpenDoor.cs" t="Include" />
-          <e p="PlayTuto.cs" t="Include" />
           <e p="SwingOnlyButton.cs" t="Include" />
           <e p="WallRepairElevator.cs" t="Include" />
         </e>

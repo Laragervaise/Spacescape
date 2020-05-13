@@ -92,8 +92,6 @@ public class HandPropeller : MonoBehaviour {
 
         //Mesh initialization;
         this.GetComponent<MeshFilter>().mesh = _ungrabbingMesh;
-
-        //Task.Delay(500).ContinueWith(t => ForceRetractHand());
     }
 
     void FixedUpdate() {

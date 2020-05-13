@@ -37,6 +37,8 @@ public class DSGates : MonoBehaviour
 
     public void StartOpenClose()
     {
+        Debug.Log("doooors");
+        Debug.Log(GetComponent<Animation>().isPlaying.ToString());
         if (!GetComponent<Animation>().isPlaying)
         {
             CurrentState = !CurrentState;

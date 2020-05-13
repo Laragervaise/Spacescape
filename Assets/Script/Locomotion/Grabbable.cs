@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 
 public class Grabbable : MonoBehaviour {
+    /*
+     * 
+     */
+    
     //public instances
     public Vector3 _eulerAngleOffset = Vector3.zero;
     public Vector3 _offsetPosition = Vector3.zero;
