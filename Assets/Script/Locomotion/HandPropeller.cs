@@ -35,6 +35,7 @@ public class HandPropeller : MonoBehaviour {
     public float _maxPlierDist = 4.0f;
     public float _minDistToAnchor = 0.3f;
     public float _speedFactor = 0.2f;
+    public double _collisionFactor = -0.7;
 
     //Private instances
     private PropulsionManager _ownerPM;
@@ -161,8 +162,8 @@ public class HandPropeller : MonoBehaviour {
 
             // Ensure does not enter in Objects: To be improved
             if ((_collisionSpeedEnter != Vector3.zero) & (!_forceRetract) & (!_attached_object) & (!_attached)) {
-                Vector3 new_displacement = (this.transform.position - _lastPosition);
-                if (Vector3.Dot(_collisionSpeedEnter, new_displacement) > 0) {
+                Vector3 new_displacement = Vector3.Normalize((this.transform.position - _lastPosition)/2);
+                if (Vector3.Dot(_collisionSpeedEnter, new_displacement) >= _collisionFactor) {
                     this.transform.position = _lastPosition;
                     this.transform.rotation = _lastRotAnchor;
                 }
@@ -259,10 +260,10 @@ public class HandPropeller : MonoBehaviour {
             _owner.GetComponent<Rigidbody>().velocity = Vector3.Normalize(_speed-_owner.GetComponent<Rigidbody>().velocity) * (-magnitude);
         }*/
 
-        if ((!other.gameObject.CompareTag("Plier")) & (!other.gameObject.CompareTag("Player"))) {
+        if ((!other.gameObject.CompareTag("Plier")) & (!other.gameObject.CompareTag("Player")) & (other.GetComponent<Grabbable>() == null)) {
             //_freeze_propulsion = true;
             ResetPropulsionSpeed();
-            _collisionSpeedEnter = _speed;
+            _collisionSpeedEnter = Vector3.Normalize(_speed);
         }
 
         // Save collision properties
