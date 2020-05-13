@@ -9,6 +9,7 @@ TagManager:
   - NotDragable
   - Plier
   - buttonSwing
+  - grabbableStuff
   layers:
   - Default
   - TransparentFX
