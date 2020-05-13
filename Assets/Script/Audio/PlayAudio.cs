@@ -12,6 +12,11 @@ public abstract class PlayAudio : MonoBehaviour {
         audio = GetComponent<AudioSource>();
     }
 
+    public IEnumerator PlayClipAfterDelay(float seconds) {
+        yield return new WaitForSeconds(seconds);
+        StartCoroutine(PlayClip());
+    }
+    
     public IEnumerator PlayClip() {
         if (!alreadyPlayed) {
             alreadyPlayed = true;

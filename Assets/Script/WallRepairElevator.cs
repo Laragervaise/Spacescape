@@ -5,6 +5,7 @@ using UnityEngine;
 public class WallRepairElevator : MonoBehaviour {
     public GameObject[] swingables;
     public ElevatorDownKinematic elevator;
+    public PlayAudio clipToPlay;
 
     private int buttonsLeft;
     // Start is called before the first frame update
@@ -20,12 +21,7 @@ public class WallRepairElevator : MonoBehaviour {
         if (--buttonsLeft == 0) {
             // Call the elevator
             elevator.StartMoving();
+            StartCoroutine(clipToPlay.PlayClipAfterDelay(3));
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

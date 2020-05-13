@@ -17,7 +17,7 @@ public class GameEnd : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject == accessCard && !triggered) {
             triggered = true;
-            fader.FadeIn();
+            fader.FadeOut();
         }
     }
 }

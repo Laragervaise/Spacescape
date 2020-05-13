@@ -966,6 +966,7 @@
             <e p="PlayAudioOnTrigger.cs" t="Include" />
             <e p="PlayAudioOpenDoor.cs" t="Include" />
             <e p="PlayAudioSImple.cs" t="Include" />
+            <e p="PlayAudioStartGame.cs" t="Include" />
           </e>
           <e p="ElevatorDownKinematic.cs" t="Include" />
           <e p="GameEnd.cs" t="Include" />
