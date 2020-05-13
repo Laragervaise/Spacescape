@@ -42,11 +42,6 @@ public class ControllerGetter : MonoBehaviour
     {
         // Update Inputs
         OVRInput.Update();
-
-        // Replay last audio source
-        if (OVRInput.GetDown(OVRInput.Button.One)) {
-            PlayAudio.PlayLastAudio();
-        }
     }
 
 
