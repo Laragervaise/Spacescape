@@ -161,7 +161,7 @@ public class HandPropeller : MonoBehaviour {
             }
 
             // Ensure does not enter in Objects: To be improved
-            if ((_collisionSpeedEnter != Vector3.zero) & (!_forceRetract) & (!_attached) & (_collisionSpeedEnter!=Vector3.zero)) {
+            if ((_collisionSpeedEnter != Vector3.zero) & (!_forceRetract) & (!_attached)) {
                 Vector3 new_speed = Vector3.Normalize((this.transform.position - _lastPosition)/2);
                 if (Vector3.Dot(_collisionSpeedEnter, new_speed) >= _collisionFactor) {
                     this.transform.position = _lastPosition;
