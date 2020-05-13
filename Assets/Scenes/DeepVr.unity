@@ -17419,7 +17419,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2
+  m_Intensity: 3
   m_Range: 6
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -17476,7 +17476,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1445836247}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: -0.04, y: 3.6, z: -14.5}
+  m_LocalPosition: {x: -0.115, y: 3.42, z: -14.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -22772,6 +22772,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f91202a311245a44fa59459a78e14117, type: 3}
+--- !u!114 &1976370981 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114903950759648278, guid: f91202a311245a44fa59459a78e14117,
+    type: 3}
+  m_PrefabInstance: {fileID: 1976370980}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cba842401163a7046b70910b1ace8284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1994607752
 GameObject:
   m_ObjectHideFlags: 0
@@ -22912,7 +22924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 424369045030bd440b73d6d6be32b9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  door: {fileID: 0}
+  door: {fileID: 1976370981}
 --- !u!1 &1995944391
 GameObject:
   m_ObjectHideFlags: 0
